@@ -3,6 +3,12 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{amssymb}
+\usepackage{algorithm2e}
+\RestyleAlgo{ruled}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
 
 \title{CM project}
 \author{Luca Moroni, Diego Arcelli}
@@ -13,26 +19,33 @@
 \maketitle
 
 \section{Introduzione}
-
 In questa sezione andremo a definire il problema soggetto del presente elaborato.\\
 Partiamo prima però con un richiamo alle notazioni utilizzate e qualche preliminare tecnico.
-
 \subsection{Notazioni}
-
 bla bla bla
-
 \subsection{Il problema}
-
 Il problema da noi selezionato è il numero 32 della sezione "progetti nonML".\\
 Il problema consiste nel trovare il minimo di una funzione quadratica, il cui dominio è vincolato, il problema nello specifico rientra nella tipologia "knapsack quadratic non-separable problems".\\
 \[\min \{x'Qx + q'x : a'x \geq b, l \leq x \leq u\}\]
-Dove $x \in \mathbb{R}^n$ mentre $q, a, l, u$  sono vettori fissati in $\mathbb{R}^n$ con $0 \leq l < u$, e $Q \in \mathbb{R}^{n \times n}$ è una matrice semi-definita positiva.
-
+Dove $x \in \mathbb{R}^n$ mentre $q, a, l, u$  sono vettori fissati in $\mathbb{R}^n$ con $0 \leq l < u$, e $Q \in \mathbb{R}^{n \times n}$ è una matrice semi-definita positiva.\\
+La funzione obiettivo, a seconda della scelta di $Q$ e $q$, puo essere limitata inferiormente oppure no, di fatto, avendo un problema vincolato la nostra funzione ammetterà un unico punto di minimo nella regione ammissibile se non vuota, ciò deriva dal teorema di Weistrass, essendo la regione ammissibile un insieme chiuso e convesso.
 \section{Algoritmo risolutivo}
 Per la risoluzione di tale problema, la traccia ci ha esplicitamente richiesto di utilizzare un metodo iterativo di discesa del gradiente, applicando però la tecnica della gradient projection, in quanto ci troviamo a dover minimizzare una funzione vincolata. Si è deciso di applicare la metodologia di Wolfe, la quale consiste, informalmente, nel calcolare il gradiente in un punto, muoversi nella direzione opposta utilizzando un qualche metodo di scelta del passo, e poi proiettare il punto trovato all'interno della regione ammissibile.\\
-Si presentano ora due problematiche, capire come proiettare il punto trovato ad ogni iterazione all'interno della regione ammissibile e capire quando fermarsi, quest'ultima problematica viene risolta definendo come stopping criteria la condizione che la norma della differenza tra la proiezione del punto successivo e il punto attuale sia minore di un certo valore soglia $\epsilon$.\\
-Per quanto riguarda invece la tecnica di proiezione la descriveremo nella seguente sottosezione.\\
+Si presentano ora due problematiche, capire come proiettare il punto trovato ad ogni iterazione all'interno della regione ammissibile e capire quando fermarsi.
+Quest'ultima problematica viene risolta definendo come stopping criteria la condizione che la norma della differenza tra la proiezione del punto successivo e il punto attuale sia minore di un certo valore soglia $\epsilon$. Al netto di un passo sufficientemente grande (tratteremo questo aspetto in una sottosezione successiva) abbiamo due casi, nel caso in cui il punto successivo sia interno alla regione ammissibile, allora questo stopping criteria si attiverà quando il gradiente è vicino a 0 e data la convessita della funzione obiettivo è condizione necessaria e sufficiente per l'ottimalità del punto. Nel caso in cui lo spostamento ci porta fuori dalla regione ammissibile se la proiezione ci porterà sul bordo molto vicino al punto del passo precedente allora la direzione di spostamento, ovvero l'antigradiente, approssimativamente (per $\epsilon$ abbastanza piccolo) apparterrà al cono duale, generato dai vincoli che rappresentano il bordo della regione ammissibile, quindi per il lemma di Farkas ogni direzione $d$ appartenente all'insieme delle direzioni ammissibili è una direzione di crescita in quanto $\nabla f(x)'d \geq 0$, perciò il punto è un punto di minimo locale nella regione ammissibile. Si fa riferimento a \cite{pgm_method} per una riprova formale.\\
+Per quanto riguarda invece la tecnica di proiezione la descriveremo nella seguente sottosezione.
+\SetKwComment{Comment}{/* }{ */}
+\begin{algorithm}
+\caption{Gradient Projection Algorithm}
+\KwData{$\{f (function), a, u, l, b\}, x_0, \epsilon, \epsilon'$}
 
+\While{$\| x_i - x_{i-1} \| \leq \epsilon$}{
+  $d \gets -\nabla f(x_i)$\\
+  $\alpha \gets get\_step\_size()$\\
+  $y \gets x_i + \alpha d$\\
+  $x_i \gets project(\{f (function), a, u, l, b\}, y, \epsilon')$\\
+}
+\end{algorithm}
 \subsection{Metodo di proiezione}
 Una volta calcolato il punto derivante dal passo di discesa del gradiente si verifica l'appartenenza alla regione ammissibile, nel qual caso la proiezione non avrà alcun effetto, nel caso, invece in cui il punto esca fuori dalla regione ammissibile, definiamo la proiezione come il punto appartenente alla regione ammissibile che minimizza la distanza euclidea dal punto calcolato. Dall'impostazione appena esplicitata ci rendiamo conto che il problema della proiezione è un problema analogo a quello di partenza ma piu semplice, definiamolo formalmente.
 \[\min \{\|x - \hat{x} \|_2^2 : a'x \geq b, l \leq x \leq u \}\]
@@ -42,7 +55,6 @@ Riscriviamo la funzione obiettivo del problema di proiezione.
 Dove $I$ è la matrice identità. Il problema di Proiezione è definito come Knapsack Separable Quadratic Problem, e per questa specifica tipologia esistono metodi risolutivi che non richiedono la discesa del gradiente. Prima di addentrarci nella descrizione del metodo riformuliamo il problema.\\
 Definiamo $\widetilde{x} = x - \hat{x}$ e perciò $x = \widetilde{x} + \hat{x}$ sostituendo abbiamo che, $\widetilde{x} \geq l - \hat{x}$, $\widetilde{x} \leq u - \hat{x}$ definiamo perciò $\widetilde{l} = l - \hat{x}$ e $\widetilde{u} = u - \hat{x}$, inoltre il vincolo $a'x \geq b$ diventa $a'\widetilde{x} \geq b - a'\hat{x}$ volendo inoltre essere consistenti con la formulazione del problema in [2] dobbiamo trasformare tale vincolo nel seguente $-a'\widetilde{x} \leq -(b - a'\hat{x})$ e definiamo $\widetilde{a} = -a$ e $\widetilde{b} = -(b - a'\hat{x})$.
 \[\min \{\widetilde{x}'I\widetilde{x} : \widetilde{a}'\widetilde{x} \leq \widetilde{b}, \widetilde{l} \leq \widetilde{x} \leq \widetilde{u} \}\]
-
 Abbiamo ora un problema consistente con la formulazione presente in \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081}. Facendo sempre riferimento a \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081}, nei quali articoli sono esplicitate varie metodologie risolutive di un problema del tipo Knapsack Separable Quadratic Problem, abbiamo deciso di utilizzare il Lagrange multiplier search method, chiamato anche break point search method, nello specifico per la ricerca nei break points (che definiremo) applicheremo il metodo tramite sorting, definito anche metodo di ranking.\\
 Seguendo \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081} riformuliamo la derivazione del metodo risolutivo per il nostro problema.\\
 Costruiamo la funzione duale lagrangiana (togliamo dalla notazione la tilde per rendere più leggera la notazione)
@@ -50,7 +62,6 @@ Costruiamo la funzione duale lagrangiana (togliamo dalla notazione la tilde per 
 $x_j \in X_j$ indica che la j-esima componente di $x$ deve essere compresa nel box constrain, stiamo cercando di risolvere il problema applicando la definizione di duale prendendo in considerazione solamente il vincolo di disuguaglianza. Ne segue.
 \[q'(\mu) = -b + \sum_j { a_j x_j(\mu)}\]
 Dove $x_j(\mu)$ è il minimo (unico) rispetto al box constraint ed è definito come segue.
-
 \begin{equation}
     \begin{cases}
       l_j : \mu \geq -2l_j/a_j\\
@@ -58,20 +69,59 @@ Dove $x_j(\mu)$ è il minimo (unico) rispetto al box constraint ed è definito c
       x_j : \mu = -2x_j/a_j
     \end{cases}
 \end{equation}
-
 Come esplicitato in \cite{Jeong2014IndefiniteKS} possiamo vedere $x_j(\mu) = median \{l_j, u_j, \mu\}$. Definimamo $\mu_j^+ = -2l_j/a_j$ e $\mu_j^- = -2u_j/a_j$ i quali sono punti significativi in quanto, la funzione $q'(\mu)$ è una funzione non cresente lineare a tratti i quali tratti sono delineati dai punti $\mu_j^+$ e $\mu_j^-$. A tal proposito, seguendo sempre \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081} dobbiamo trovare il valore $\mu^*$ tale per cui $q'(\mu^*) = 0$ il quale ci restituirà il punto ottimo $x(\mu^*)$ dal quale possiamo ricavare il punto proiettato, il quale soddisfa le condizioni KKT necessarie a definirlo un punto di minimo. Per trovare il valore di $\mu^*$, utilizzando il metodo di ranking, ordiniamo dapprima i valori di $\mu_j^+$ e $\mu_j^-$ la quale operazione richiede O(n log n) e tramite una ricerca dicotomica cerchiamo il break point che pone a zero $q'$ oppure troviamo la coppia $\mu_{j^-}$ e $\mu_{j^+}$ tale che $q'(\mu_{j^-}) > 0$ e $q'(\mu_{j^+}) < 0$ i quali ci definiscono un intervallo nel quale la funzione $q'$ è lineare, perciò trovarne lo zero diventa un operazione diretta.\\
 Il metodo risolutivo nel suo complesso richiede tempo O(n log n) dove n è il numero di variabili del problema.
-
 \subsection{Metodi di scelta del passo}
-Per la selezione del passo dell'algoritmo di discesa di gradiente abbiamo varie scelte, come visto a lezione, nella presente trattazione faremo riferimento ai risultati teorici presenti in \cite{sgd_notes} perciò implementeremo:\\
+Per la selezione del passo dell'algoritmo di discesa di gradiente abbiamo varie scelte, come visto a lezione, nella presente trattazione faremo riferimento ai seguenti metodi:
 \begin{itemize}
     \item Constant step size
     \item Diminishing step size
-    \item Polyak's step size
     \item Modified Polyak's step size
 \end{itemize}
-
+\subsubsection{Constant Step Size}
+I risultati teorici riportati in questa sotto sezione sono stati ripresi da \cite{notesfirstom}.\\
+Data la funzione obiettivo $f$ convessa (non strettamente), la discesa del gradiente proiettato converge sub-linearmente.\\
+\'E noto il seguente lemma il quale ci garantisce la convergenza del metodo. 
+\begin{lemma}
+Assumendo:
+\begin{itemize}
+    \item $f : \mathbb{R}^n \to \mathbb{R}$ L-continua.
+    \item $X \subset \mathbb{R}^n$ essere una regione ammissibile convessa.
+\end{itemize}
+Allora la discesa del gradiente proiettato con passo $\frac{1}{L}$ soddisfa:
+\[f(x_{k+1}) \leq f(x_k) - \frac{L}{2}\|x_{k+1} - x_k\|^2 \]
+\end{lemma}
+Da cui è ricavabile il seguente teorema, il quale ci garantisce che il metodo richiede al più $O(\frac{L}{\epsilon})$ iterazioni per ottenere un punto distante al più $\epsilon$ dal punto ottimo.
+\begin{theorem}
+Sotto le condizioni del lemma precedente, il metodo di discesa del gradiente proiettato con passo $\frac{1}{L}$ soddisfa:
+\[f(x_k) - f^* \leq \frac{L}{2k}\| x^* - x_0 \|^2\]
+\end{theorem}
+\subsubsection{Diminishing Step Size}
+Nella presente sotto sezione facciamo riferimento ai risultati teorici presenti in \cite{sgd_notes}, nel quale viene riportata la riprova della convergenza del metodo nel caso di proiezione del sotto-gradiente utilizzando la riduzione del passo. Nel nostro caso abbiamo accesso al gradiente, essendo la funzione obiettivo differenziabile, quindi i risultati sono validi.\\
+Assumiamo di selezionare un passo che ad ogni iterazione diminuisce con le seguenti proprietà:
+\begin{itemize}
+    \item $\alpha_k \to 0$
+    \item $\sum_k \alpha_k = \infty$
+    \item $\sum_k \alpha_k^2 < \infty$
+\end{itemize}
+Essendo sicura l'esistenza di un minimo nel caso di regione ammissibile non vuota, possiamo essere sicuri che il metodo converga dal seguente enunciato.
+\begin{theorem}
+Date le assunzioni precedentemente fatte su $\alpha_k$ allora per la sequenza $\{x_k\}$ generata dal metodo di discesa di sotto-gradiente proiettato con $\alpha_k$ come passo, abbiamo che:
+\[\lim_{k \to \infty} \| x_k - x^*\| = 0\]
+\end{theorem}
+\subsubsection{Modified Polyak Step Size}
+Nella presente sotto-sezione come nella precedente faremo rifemento ai risultati presenti in \cite{sgd_notes}.\\
+Si è scelto di utilizzare il passo di Polyak modificato, poiché nella sua formulazione originale il metodo ha bisogno di avere accesso al valore di minimo della funzione obiettivo, la quale è un informazione che nel caso generale del nostro problema non possiamo avere, essendo la $Q$ semidefinita-positiva se il vettore $q$ è scelto non perpendicolare agli autovettori associato all'autovalore 0 di $Q$ allora $f$ sarà illimitata inferiormente e perciò non possiamo sapere quale è il valore di minimo nella regione ammissibile.\\
+Definiamo il passo,
+\[\alpha_k = \frac{f(x_k) - \hat{f_k}}{\|s_k\|^2} = \frac{f(x_k) - \min_{0 \leq j \leq k} f(x_j) + \delta}{\|s_k\|^2}.\]
+Dal quale si puo esplicitare il seguente risultato di convergenza del metodo.
+\begin{theorem}
+Data la sequenza di iterazioni $\{x_k\}$ generate dal metodo di proiezione del sotto-gradiente con passo $\alpha_k$ del metodo di Polyak modificato, abbiamo che:
+\[\lim_{k \to \infty} \inf f(x_k) \leq f^* + \delta\]
+\end{theorem}
+\section{Esperimenti}
+Nella presente sezione, dopo aver implementato l'algoritmo definito precedentemente, anderemo a verificare i risultati teorici riportati nella sezione precedente. Proporremo all'algoritmo risolutivo varie configurazioni, particolari e non, e soprattutto vedremo se il metodo riesce a gestire dimensioni molto del problema e quanto bene riesce a scalare.\\\\
+bla bla bla
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \end{document}
-
