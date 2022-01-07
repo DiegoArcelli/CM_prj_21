@@ -32,13 +32,13 @@ La funzione obiettivo, a seconda della scelta di $Q$ e $q$, puo essere limitata 
 \section{Algoritmo risolutivo}
 Per la risoluzione di tale problema, la traccia ci ha esplicitamente richiesto di utilizzare un metodo iterativo di discesa del gradiente, applicando però la tecnica della gradient projection, in quanto ci troviamo a dover minimizzare una funzione vincolata. Si è deciso di applicare la metodologia di Wolfe, la quale consiste, informalmente, nel calcolare il gradiente in un punto, muoversi nella direzione opposta utilizzando un qualche metodo di scelta del passo, e poi proiettare il punto trovato all'interno della regione ammissibile.\\
 Si presentano ora due problematiche, capire come proiettare il punto trovato ad ogni iterazione all'interno della regione ammissibile e capire quando fermarsi.
-Quest'ultima problematica viene risolta definendo come stopping criteria la condizione che la norma della differenza tra la proiezione del punto successivo e il punto attuale sia minore di un certo valore soglia $\epsilon$. Al netto di un passo sufficientemente grande (tratteremo questo aspetto in una sottosezione successiva) abbiamo due casi, nel caso in cui il punto successivo sia interno alla regione ammissibile, allora questo stopping criteria si attiverà quando il gradiente è vicino a 0 e data la convessita della funzione obiettivo è condizione necessaria e sufficiente per l'ottimalità del punto. Nel caso in cui lo spostamento ci porta fuori dalla regione ammissibile se la proiezione ci porterà sul bordo molto vicino al punto del passo precedente allora la direzione di spostamento, ovvero l'antigradiente, approssimativamente (per $\epsilon$ abbastanza piccolo) apparterrà al cono duale, generato dai vincoli che rappresentano il bordo della regione ammissibile, quindi per il lemma di Farkas ogni direzione $d$ appartenente all'insieme delle direzioni ammissibili è una direzione di crescita in quanto $\nabla f(x)'d \geq 0$, perciò il punto è un punto di minimo locale nella regione ammissibile. Si fa riferimento a \cite{pgm_method} per una riprova formale.\\
+Quest'ultima problematica viene risolta basandosi sul fatto che in un problema di ottimizzazione vincolato un punto stazionario è un punto $x$ tale che $x = projection(x + \alpha\nabla f(x))$ $\forall \alpha \geq 0$.\\
+Definendo come stopping criteria la condizione che la norma della differenza tra la proiezione del punto successivo e il punto attuale sia minore di un certo valore soglia $\epsilon$. Al netto di un passo sufficientemente grande (tratteremo questo aspetto in una sottosezione successiva) abbiamo due casi, nel caso in cui il punto successivo sia interno alla regione ammissibile, allora questo stopping criteria si attiverà quando il gradiente è vicino a 0 e data la convessita della funzione obiettivo è condizione necessaria e sufficiente per l'ottimalità del punto. Nel caso in cui lo spostamento ci porta fuori dalla regione ammissibile se la proiezione ci porterà sul bordo molto vicino al punto del passo precedente allora la direzione di spostamento, ovvero l'antigradiente, approssimativamente (per $\epsilon$ abbastanza piccolo) apparterrà al cono duale, generato dai vincoli che rappresentano il bordo della regione ammissibile, quindi per il lemma di Farkas ogni direzione $d$ appartenente all'insieme delle direzioni ammissibili è una direzione di crescita in quanto $\nabla f(x)'d \geq 0$, perciò il punto è un punto di minimo locale nella regione ammissibile. Si faccia riferimento a \cite{pgm_method} per una riscontro formale.\\
 Per quanto riguarda invece la tecnica di proiezione la descriveremo nella seguente sottosezione.
 \SetKwComment{Comment}{/* }{ */}
 \begin{algorithm}
 \caption{Gradient Projection Algorithm}
 \KwData{$\{f (function), a, u, l, b\}, x_0, \epsilon, \epsilon'$}
-
 \While{$\| x_i - x_{i-1} \| \leq \epsilon$}{
   $d \gets -\nabla f(x_i)$\\
   $\alpha \gets get\_step\_size()$\\
@@ -77,6 +77,7 @@ Per la selezione del passo dell'algoritmo di discesa di gradiente abbiamo varie 
     \item Constant step size
     \item Diminishing step size
     \item Modified Polyak's step size
+    \item Armijo step size
 \end{itemize}
 \subsubsection{Constant Step Size}
 I risultati teorici riportati in questa sotto sezione sono stati ripresi da \cite{notesfirstom}.\\
@@ -118,6 +119,17 @@ Dal quale si puo esplicitare il seguente risultato di convergenza del metodo.
 \begin{theorem}
 Data la sequenza di iterazioni $\{x_k\}$ generate dal metodo di proiezione del sotto-gradiente con passo $\alpha_k$ del metodo di Polyak modificato, abbiamo che:
 \[\lim_{k \to \infty} \inf f(x_k) \leq f^* + \delta\]
+\end{theorem}
+\subsubsection{Armijo Step Size}
+Trattiamo un'altra scelta del passo inesatta, il metodo di Armijo, i risultati sulla convergenza che verranno esplicitati fanno riferimento a \cite{gafni1982convergence} nel quale si dimostra la convergenza del metodo di discesa di gradiente proiettato con tale scelta del passo.\\
+Con il fine di alleggerire la notazione definiamo, per ogni $x$ nella regione ammissibile e $\alpha \geq 0$, l'arco di punti.
+\[x(\alpha) = project(x + \alpha \nabla f(x))\]
+Il metodo di Armijo seleziona ad ogni iterazione $\alpha_k = \beta^{m_k}s$, dove $m_k$ è il più piccolo intero non negativo $m$ tale che:
+\[f(x_k) -f(x_k(\beta^ms)) = \sigma \nabla f(x_k)'(x_k - x_k(\beta^ms))\]
+Dove $s > 0$, $\beta \in (0,1)$ e $\sigma \in (0,1)$ sono scalari fissati.\\
+Definito il passo di Armijo per la gradient projection, è noto il seguente.
+\begin{theorem}
+Sia $\{x_k\}$ una sequenza generata dall'algoritmo di discesa del gradiente proiettato con scelta del passo tramite metodo di Armijo, allora ogni punto limite di $\{x_k\}$ è stazionario.
 \end{theorem}
 \section{Esperimenti}
 Nella presente sezione, dopo aver implementato l'algoritmo definito precedentemente, anderemo a verificare i risultati teorici riportati nella sezione precedente. Proporremo all'algoritmo risolutivo varie configurazioni, particolari e non, e soprattutto vedremo se il metodo riesce a gestire dimensioni molto del problema e quanto bene riesce a scalare.\\\\
