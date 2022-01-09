@@ -14,8 +14,8 @@ function [x_proj] = projection(a, l, u, b, y, eps)
 
     q_p = @(m) lagrangian_dual_prime(a_tilde, l_tilde, u_tilde, b_tilde, m);
 
-    % control if there aren't break_points >= 0 or all the breakpoint >= 0 correspond to negative q prime
-    if isempty(break_points) || all(arrayfun(q_p, break_points) <= 0)
+    % check if a'x(mu) - b <= 0
+    if q_p(0) <= 0
         x_proj = min_x_mu(a_tilde, l_tilde, u_tilde, 0) + y;
         return;
     end
