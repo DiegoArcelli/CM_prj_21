@@ -10,7 +10,7 @@ function [x_proj] = projection(a, l, u, b, y, eps)
 
     % use quick sort O(n^2) | avg O(n log n)
     break_points = union(mi_plus, mi_minus);
-    break_points = break_points(break_points>=0);
+    break_points = break_points(break_points>0);
 
     q_p = @(m) lagrangian_dual_prime(a_tilde, l_tilde, u_tilde, b_tilde, m);
 
@@ -18,6 +18,10 @@ function [x_proj] = projection(a, l, u, b, y, eps)
     if q_p(0) <= 0
         x_proj = min_x_mu(a_tilde, l_tilde, u_tilde, 0) + y;
         return;
+    end
+
+    if length(break_points) == 1
+        break_points = [0, break_points];
     end
 
     mu_l = 0;
