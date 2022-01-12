@@ -1,8 +1,8 @@
-function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, x_start,a, l, u, b, eps, eps_prime, stepsize, stepsize_args)
+function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b, x_start, eps, eps_prime, max_iterations, stepsize, stepsize_args)
     % docstring
 
     f = @(x) objective_function(Q,q,x);
-    prj = @(y) projection(a, l, u, b, y, eps_prime);
+    prj = @(y) projection(l, u, a, b, y, eps_prime);
 
     x_i = x_start;
 
@@ -14,7 +14,8 @@ function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, x_start,a, l, u, b, eps, ep
 
     iteration = 1;
 
-    while 1
+    while iteration <= max_iterations
+        fprintf("iterata %d \n", iteration);
         d = -g_i;
 
         if stepsize == "fixed"

@@ -1,4 +1,4 @@
-function [x_proj] = projection(a, l, u, b, y, eps)
+function [x_proj] = projection(l, u, a, b, y, eps)
     % docstring
 
     l_tilde = l - y;
@@ -13,11 +13,11 @@ function [x_proj] = projection(a, l, u, b, y, eps)
     break_points = union(mi_plus, mi_minus);
     break_points = break_points(break_points>0);
 
-    q_p = @(m) lagrangian_dual_prime(a_tilde, l_tilde, u_tilde, b_tilde, m);
-
+    q_p = @(m) lagrangian_dual_prime(l_tilde, u_tilde, a_tilde, b_tilde, m);
+    
     % check if a'x(mu) - b <= 0
     if q_p(0) <= 0
-        x_proj = min_x_mu(a_tilde, l_tilde, u_tilde, 0) + y;
+        x_proj = min_x_mu(l_tilde, u_tilde, a_tilde, 0) + y;
         return;
     end
 
@@ -34,7 +34,7 @@ function [x_proj] = projection(a, l, u, b, y, eps)
         mu = break_points(j);
 
         if abs(q_p(mu)) < eps
-            x_proj = min_x_mu(a_tilde, l_tilde, u_tilde, mu) + y;
+            x_proj = min_x_mu(l_tilde, u_tilde, a_tilde, mu) + y;
             return;
         elseif q_p(mu) < 0
             mu_u = mu;
@@ -48,18 +48,18 @@ function [x_proj] = projection(a, l, u, b, y, eps)
     end
 
     mu_star = mu_l + g_u*(mu_u - mu_l)/(g_u - g_l);
-    x_proj = min_x_mu(a_tilde, l_tilde, u_tilde, mu_star) + y;
+    x_proj = min_x_mu(l_tilde, u_tilde, a_tilde, mu_star) + y;
 end
 
 
-function [x_m] = min_x_mu(a, l, u, mu)
+function [x_m] = min_x_mu(l, u, a, mu)
     % docstring
 
     x_m = median([l, u, -(a*mu)/2], 2);
 end
 
 
-function [q_prime] = lagrangian_dual_prime(a, l, u, b, mu)
+function [q_prime] = lagrangian_dual_prime(l, u, a, b, mu)
     % docstring
 
     x_m = min_x_mu(a, l, u, mu);
