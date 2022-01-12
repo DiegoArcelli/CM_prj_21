@@ -1,5 +1,6 @@
 function [x_proj] = projection(a, l, u, b, y, eps)
     % docstring
+
     l_tilde = l - y;
     u_tilde = u - y;
     a_tilde = -a;
@@ -21,7 +22,7 @@ function [x_proj] = projection(a, l, u, b, y, eps)
     end
 
     % add 0 as breakpoint before all other to avoid degenerative cases
-    break_points = [0, break_points];
+    break_points = [0, break_points'];
 
     mu_l = 0;
     mu_u = 0;
@@ -53,12 +54,14 @@ end
 
 function [x_m] = min_x_mu(a, l, u, mu)
     % docstring
+
     x_m = median([l, u, -(a*mu)/2], 2);
 end
 
 
 function [q_prime] = lagrangian_dual_prime(a, l, u, b, mu)
     % docstring
+
     x_m = min_x_mu(a, l, u, mu);
     q_prime = -b + a'*x_m;
 end
