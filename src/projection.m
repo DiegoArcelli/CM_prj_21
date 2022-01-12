@@ -20,9 +20,8 @@ function [x_proj] = projection(a, l, u, b, y, eps)
         return;
     end
 
-    if length(break_points) == 1
-        break_points = [0, break_points];
-    end
+    % add 0 as breakpoint before all other to avoid degenerative cases
+    break_points = [0, break_points];
 
     mu_l = 0;
     mu_u = 0;
