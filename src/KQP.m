@@ -1,4 +1,4 @@
-function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b, x_start, eps, eps_prime, max_iterations, stepsize, stepsize_args)
+function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b, x_start, eps, eps_prime, max_iterations, stepsize, stepsize_args, verbose)
     % docstring
 
     f = @(x) objective_function(Q,q,x);
@@ -15,7 +15,11 @@ function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b, x_start, eps, e
     iteration = 1;
 
     while iteration <= max_iterations
-        fprintf("iterata %d \n", iteration);
+        
+        if verbose
+            fprintf("iterata %d \n", iteration);
+        end
+        
         d = -g_i;
 
         if stepsize == "fixed"

@@ -10,9 +10,7 @@ function [Q, q, l, u, a, b, x_start] = generate_problem(n, scale)
     while any(l > u) || a'*u < b
         [l, u, a, b] = random_constraints(n, scale);
     end
-    
-    disp(all(l<=u))
-        
+            
     x_start = projection(l, u, a, b, randn(n, 1)*scale, 10e-10);
 end
 
