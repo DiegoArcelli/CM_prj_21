@@ -62,6 +62,6 @@ end
 function [q_prime] = lagrangian_dual_prime(l, u, a, b, mu)
     % docstring
 
-    x_m = min_x_mu(a, l, u, mu);
+    x_m = min_x_mu(l, u, a, mu);
     q_prime = -b + a'*x_m;
 end
