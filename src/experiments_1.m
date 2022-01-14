@@ -3,7 +3,6 @@
 % 2 dimensional problems
 n = 2;
 
-options = optimoptions('fmincon','Display','off');
 
 % -- random generated
 for i = 1:10
@@ -16,10 +15,11 @@ for i = 1:10
     toc();
 
     tic();
-    x_mega = fmincon(@(x) objective_function(Q, q, x), x_start, [-eye(n); eye(n); -a'], [-l; u; -b], [], [], [], [], [], options);
+    [x_star_real, f_star_real] = minimize_matlab_kqp(n, x_start, Q, q, l, u, a, b);
     toc();
 
-    disp(norm(x_star - x_mega)/norm(x_mega));
+    disp(norm(x_star - x_star_real)/norm(x_star_real));
+    disp(norm(f_star - f_star_real)/norm(f_star_real));
 end
 
 % 10 dimensional problems
@@ -36,10 +36,11 @@ for i = 1:10
     toc();
 
     tic();
-    x_mega = fmincon(@(x) objective_function(Q, q, x), x_start, [-eye(n); eye(n); -a'], [-l; u; -b], [], [], [], [], [], options);
+    [x_star_real, f_star_real] = minimize_matlab_kqp(n, x_start, Q, q, l, u, a, b);
     toc();
 
-    disp(norm(x_star - x_mega)/norm(x_mega));
+    disp(norm(x_star - x_star_real)/norm(x_star_real));
+    disp(norm(f_star - f_star_real)/norm(f_star_real));
 end
 
 % 100 dimensional problems
@@ -52,12 +53,13 @@ for i = 1:10
     L = max(eig(Q));
 
     tic();
-    [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b , x_start, 10e-16, 10e-16, 1000, "fixed", 1/L, 0);
+    [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b , x_start, 10e-15, 10e-15, 1000, "fixed", 1/L, 0);
     toc();
 
     tic();
-    x_mega = fmincon(@(x) objective_function(Q, q, x), x_start, [-eye(n); eye(n); -a'], [-l; u; -b], [], [], [], [], [], options);
+    [x_star_real, f_star_real] = minimize_matlab_kqp(n, x_start, Q, q, l, u, a, b);
     toc();
 
-    disp(norm(x_star - x_mega)/norm(x_mega));
+    disp(norm(x_star - x_star_real)/norm(x_star_real));
+    disp(norm(f_star - f_star_real)/norm(f_star_real));
 end
