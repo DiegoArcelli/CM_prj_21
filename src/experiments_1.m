@@ -22,6 +22,11 @@ for i = 1:10
     disp(norm(f_star - f_star_real)/norm(f_star_real));
 end
 
+% plot the convergence curve
+plot(vecnorm(g_s)); 
+
+input("");
+
 % 10 dimensional problems
 n = 10;
 
@@ -43,6 +48,11 @@ for i = 1:10
     disp(norm(f_star - f_star_real)/norm(f_star_real));
 end
 
+% plot the convergence curve
+plot(vecnorm(g_s));
+
+input("");
+
 % 100 dimensional problems
 n = 100;
 
@@ -63,3 +73,8 @@ for i = 1:10
     disp(norm(x_star - x_star_real)/norm(x_star_real));
     disp(norm(f_star - f_star_real)/norm(f_star_real));
 end
+
+% plot the convergence curve
+plot(vecnorm(g_s));
+
+input("");
