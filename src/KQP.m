@@ -1,4 +1,4 @@
-function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b, x_start, eps, eps_prime, max_iterations, stepsize, stepsize_args, verbose)
+function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, eps, eps_prime, max_iterations, stepsize, stepsize_args, verbose)
     % docstring
 
     f = @(x) objective_function(Q,q,x);
@@ -11,6 +11,7 @@ function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b, x_start, eps, e
     x_s = x_start;
     f_s = f_i;
     g_s = g_i;
+    y_s = x_start;
 
     iteration = 1;
 
@@ -45,6 +46,7 @@ function [x_star, f_star, x_s, f_s, g_s] = KQP(Q, q, l, u, a, b, x_start, eps, e
         x_s = [x_s, x_i];
         f_s = [f_s, f_i];
         g_s = [g_s, g_i];
+        y_s = [y_s, y];
 
         iteration = iteration + 1;
     end
