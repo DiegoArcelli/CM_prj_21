@@ -1,4 +1,4 @@
-function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, eps, eps_prime, max_iterations, stepsize, stepsize_args, verbose)
+function [x_star, f_star, x_s, f_s, g_s] = KQP(f, l, u, a, b, x_start, eps, eps_prime, max_iterations, stepsize, stepsize_args, verbose, eq_knapsack)
     % minimize the quadratic function f(x) = x'Qx + q'x given the constraints
     % a'x >= b and l <= x <= u, by applying the gradient projection method
     % at each step the next point is computed as in the normal gradient
@@ -38,8 +38,7 @@ function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, e
     % - y_s: the sequence of points computed by the algorithm at each
     % iteration before being projected
 
-    f = @(x) objective_function(Q,q,x);
-    prj = @(y) projection(l, u, a, b, y, eps_prime);
+    prj = @(y) projection(l, u, a, b, y, eps_prime, eq_knapsack);
 
     x_i = x_start;
 
