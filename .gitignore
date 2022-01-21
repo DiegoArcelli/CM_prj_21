@@ -1,3 +1,6 @@
 # compiled matlab stuffs
 *.asv
 *.mat
+
+# miscs
+.DS_Store
