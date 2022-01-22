@@ -15,7 +15,7 @@ for i = 1:10
     toc();
 
     tic();
-    [x_star_real, f_star_real] = minimize_matlab_kqp(n, x_start, Q, q, l, u, a, b);
+    [x_star_real, f_star_real] = minimize_matlab_kqp(x_start, Q, q, l, u, a, b);
     toc();
 
     disp(norm(x_star - x_star_real)/norm(x_star_real));
@@ -41,7 +41,7 @@ for i = 1:10
     toc();
 
     tic();
-    [x_star_real, f_star_real] = minimize_matlab_kqp(n, x_start, Q, q, l, u, a, b);
+    [x_star_real, f_star_real] = minimize_matlab_kqp(x_start, Q, q, l, u, a, b);
     toc();
 
     disp(norm(x_star - x_star_real)/norm(x_star_real));
@@ -67,7 +67,7 @@ for i = 1:10
     toc();
 
     tic();
-    [x_star_real, f_star_real] = minimize_matlab_kqp(n, x_start, Q, q, l, u, a, b);
+    [x_star_real, f_star_real] = minimize_matlab_kqp(x_start, Q, q, l, u, a, b);
     toc();
 
     disp(norm(x_star - x_star_real)/norm(x_star_real));
