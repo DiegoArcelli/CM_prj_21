@@ -1,7 +1,9 @@
-% mode = 1, it shows the execution considering only the projected points
-% mode = 2, it shows the execution considering also the projections step
-% mode = 3, both mode 1 and mode 2
 function [] = plot_execution(Q, q, l, u, a, b, x_s, y_s, mode, interactive)
+    % docstring
+    % mode = 1, it shows the execution considering only the projected points
+    % mode = 2, it shows the execution considering also the projections step
+    % mode = 3, both mode 1 and mode 2
+
     f = @(x,y) x^2*Q(1,1) + x*y*(Q(2,1) + Q(1,2)) + y^2*Q(2,2) + q(1)*x + q(2)*y;
     lin = @(x) (b-a(1)*x)/a(2);
     hold on;
