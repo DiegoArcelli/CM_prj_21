@@ -28,7 +28,7 @@ function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, e
         elseif stepsize == "diminishing"
             alpha = stepsize_args(iteration);
         elseif stepsize == "polyak"
-            alpha = polyak_stepsize(f_i, g_i, f_s, stepsize_args{:});
+            alpha = polyak_stepsize(f_i, g_i, f_s, stepsize_args);
         elseif stepsize == "armijo"
             alpha = armijo_stepsize(f, prj, x_i, g_i, d, stepsize_args{:});
         end
