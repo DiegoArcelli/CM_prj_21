@@ -11,7 +11,7 @@ function [Q, q, l, u, a, b, x_start] = generate_problem(n, scale)
         [l, u, a, b] = random_constraints(n, scale);
     end
 
-    x_start = projection(l, u, a, b, randn(n, 1)*scale, 10e-10);
+    x_start = projection(l, u, a, b, randn(n, 1)*scale, 1e-15);
 end
 
 
