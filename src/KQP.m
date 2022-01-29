@@ -12,6 +12,7 @@ function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, e
     f_s = f_i;
     g_s = g_i;
     y_s = x_start;
+    f_best = f_i;
 
     iteration = 1;
 
@@ -28,7 +29,7 @@ function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, e
         elseif stepsize == "diminishing"
             alpha = stepsize_args(iteration);
         elseif stepsize == "polyak"
-            alpha = polyak_stepsize(f_i, g_i, f_s, stepsize_args);
+            alpha = polyak_stepsize(f_i, g_i, f_best, stepsize_args(iteration));
         elseif stepsize == "armijo"
             alpha = armijo_stepsize(f, prj, x_i, g_i, d, stepsize_args{:});
         end
@@ -48,6 +49,10 @@ function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, e
         g_s = [g_s, g_i];
         y_s = [y_s, y];
 
+        if f_i < f_best
+            f_best = f_i;
+        end
+
         iteration = iteration + 1;
     end
 
@@ -56,10 +61,9 @@ function [x_star, f_star, x_s, f_s, g_s, y_s] = KQP(Q, q, l, u, a, b, x_start, e
 end
 
 
-function [stepsize] = polyak_stepsize(f_i, g_i, f_s, delta)
+function [stepsize] = polyak_stepsize(f_i, g_i, f_best, gamma)
     % docstring
-
-    stepsize = (f_i - min(f_s) + delta)/(norm(g_i)^2);
+    stepsize = (f_i - f_best + gamma)/(norm(g_i)^2);
 end
 
 

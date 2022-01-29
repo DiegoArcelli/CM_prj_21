@@ -1,5 +1,5 @@
 bunch_file_name = "bunch.mat";
-max_iters = 100;
+max_iters = 1000;
 
 clear global x_s_fmincon;
 clear global f_s_fmincon;
@@ -55,14 +55,14 @@ for problem = bunch_cel
     f_s_kqp_mean_fs = f_s_kqp_mean_fs + padding_sequence(abs(f_s_kqp_fs - f_star)/abs(f_star), max_iters);
 
     tic();
-    [~, ~, x_s_kqp_diminishing, f_s_kqp_diminishing, g_s_kqp_diminishing] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-6, max_iters, "diminishing", @(i) i/L, 0);
+    [~, ~, x_s_kqp_diminishing, f_s_kqp_diminishing, g_s_kqp_diminishing] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-6, max_iters, "diminishing", @(i) 1/(L*i), 0);
     toc();
     
     x_s_kqp_mean_diminishing = x_s_kqp_mean_diminishing + padding_sequence(vecnorm(x_s_kqp_diminishing - x_star)/norm(x_star), max_iters);
     f_s_kqp_mean_diminishing = f_s_kqp_mean_diminishing + padding_sequence(abs(f_s_kqp_diminishing - f_star)/abs(f_star), max_iters);
 
     tic();
-    [~, ~, x_s_kqp_polyak, f_s_kqp_polyak, g_s_kqp_polyak] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-6, max_iters, "polyak", 0.1, 0);
+    [~, ~, x_s_kqp_polyak, f_s_kqp_polyak, g_s_kqp_polyak] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-6, max_iters, "polyak", @(i) L^2/i, 0);
     toc();
     
     x_s_kqp_mean_polyak = x_s_kqp_mean_polyak + padding_sequence(vecnorm(x_s_kqp_polyak - x_star)/norm(x_star), max_iters);
@@ -109,6 +109,7 @@ semilogy(x_s_kqp_mean_diminishing);
 semilogy(x_s_kqp_mean_polyak);
 semilogy(x_s_kqp_mean_armijo);
 semilogy(x_s_fmincon_mean);
+legend("Fixed", "Diminishing", "Polyak", "Armijo", "Fmincon")
 hold off
 
 input("");
@@ -119,6 +120,7 @@ semilogy(f_s_kqp_mean_diminishing);
 semilogy(f_s_kqp_mean_polyak);
 semilogy(f_s_kqp_mean_armijo);
 semilogy(f_s_fmincon_mean);
+legend("Fixed", "Diminishing", "Polyak", "Armijo", "Fmincon")
 hold off
 
 
