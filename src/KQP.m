@@ -67,16 +67,17 @@ function [stepsize] = polyak_stepsize(f_i, g_i, f_best, gamma)
 end
 
 
+% find best parameters of beta and delta !!
 function [stepsize] = armijo_stepsize(f, prj, x_i, g_i, d, beta, s, delta)
     % docstring
 
     m = 0;
-    x_beta = prj(x_i + (beta^m)*s*d);
+    x_beta = prj(x_i + (beta * 2^(-m))*s*d);
 
-    while f(x_i) - f(x_beta) < delta*g_i'*(x_i - x_beta)
+    while f(x_i) - f(x_beta) < delta*g_i'*(x_i - x_beta) && m < 500
         m = m + 1;
-        x_beta = prj(x_i + (beta^m)*s*d);
+        x_beta = prj(x_i + (beta * 2^(-m))*d);
     end
 
-    stepsize = (beta^m)*s;
+    stepsize = (beta * 2^(-m));
 end
