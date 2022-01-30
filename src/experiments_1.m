@@ -95,7 +95,7 @@ for problem = bunch_cel
     f_limit_diminishing(i) = f_seq_padded(end);
 
     tic;
-    [~, ~, x_s_kqp_polyak, f_s_kqp_polyak, g_s_kqp_polyak] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "polyak", 0.4, 0);
+    [~, ~, x_s_kqp_polyak, f_s_kqp_polyak, g_s_kqp_polyak] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "polyak", @(i) L^2/i, 0);
     timing_kqp_polyak(i) = toc;
     
     x_seq_padded = padding_sequence(vecnorm(x_s_kqp_polyak - x_star)/norm(x_star), max_iters);
