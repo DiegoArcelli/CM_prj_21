@@ -34,12 +34,19 @@ x_limit_polyak = zeros(1, max_iters);
 f_limit_polyak = zeros(1, max_iters);
 timing_kqp_polyak = zeros(1, max_iters);
 
-% armijo
-x_s_kqp_mean_armijo = zeros(1, max_iters+1);
-f_s_kqp_mean_armijo = zeros(1, max_iters+1);
-x_limit_armijo = zeros(1, max_iters);
-f_limit_armijo = zeros(1, max_iters);
-timing_kqp_armijo = zeros(1, max_iters);
+% armijo_i
+x_s_kqp_mean_armijo_i = zeros(1, max_iters+1);
+f_s_kqp_mean_armijo_i = zeros(1, max_iters+1);
+x_limit_armijo_i = zeros(1, max_iters);
+f_limit_armijo_i = zeros(1, max_iters);
+timing_kqp_armijo_i = zeros(1, max_iters);
+
+% armijo_ii
+x_s_kqp_mean_armijo_ii = zeros(1, max_iters+1);
+f_s_kqp_mean_armijo_ii = zeros(1, max_iters+1);
+x_limit_armijo_ii = zeros(1, max_iters);
+f_limit_armijo_ii = zeros(1, max_iters);
+timing_kqp_armijo_ii = zeros(1, max_iters);
 
 load(bunch_file_name)
 
@@ -108,17 +115,30 @@ for problem = bunch_cel
     f_limit_polyak(i) = f_seq_padded(end);
     
     tic;
-    [~, ~, x_s_kqp_armijo, f_s_kqp_armijo, g_s_kqp_armijo] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "armijo", {0.5, 0.9, 0.01}, 0);
-    timing_kqp_armijo(i) = toc;        
+    [~, ~, x_s_kqp_armijo_i, f_s_kqp_armijo_i, g_s_kqp_armijo_i] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "armijo", {0.5, 0.01}, 0);
+    timing_kqp_armijo_i(i) = toc;        
     
-    x_seq_padded = padding_sequence(vecnorm(x_s_kqp_armijo - x_star)/norm(x_star), max_iters);
-    f_seq_padded = padding_sequence(abs(f_s_kqp_armijo - f_star)/abs(f_star), max_iters);
+    x_seq_padded = padding_sequence(vecnorm(x_s_kqp_armijo_i - x_star)/norm(x_star), max_iters);
+    f_seq_padded = padding_sequence(abs(f_s_kqp_armijo_i - f_star)/abs(f_star), max_iters);
     
-    x_s_kqp_mean_armijo = x_s_kqp_mean_armijo + x_seq_padded;
-    f_s_kqp_mean_armijo = f_s_kqp_mean_armijo + f_seq_padded;
+    x_s_kqp_mean_armijo_i = x_s_kqp_mean_armijo_i + x_seq_padded;
+    f_s_kqp_mean_armijo_i = f_s_kqp_mean_armijo_i + f_seq_padded;
     
-    x_limit_armijo(i) = x_seq_padded(end);
-    f_limit_armijo(i) = f_seq_padded(end);
+    x_limit_armijo_i(i) = x_seq_padded(end);
+    f_limit_armijo_i(i) = f_seq_padded(end);
+    
+    tic;
+    [~, ~, x_s_kqp_armijo_ii, f_s_kqp_armijo_ii, g_s_kqp_armijo_ii] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "armijo_ii", {0.5, 0.5}, 0);
+    timing_kqp_armijo_ii(i) = toc;        
+    
+    x_seq_padded = padding_sequence(vecnorm(x_s_kqp_armijo_ii - x_star)/norm(x_star), max_iters);
+    f_seq_padded = padding_sequence(abs(f_s_kqp_armijo_ii - f_star)/abs(f_star), max_iters);
+    
+    x_s_kqp_mean_armijo_ii = x_s_kqp_mean_armijo_ii + x_seq_padded;
+    f_s_kqp_mean_armijo_ii = f_s_kqp_mean_armijo_ii + f_seq_padded;
+    
+    x_limit_armijo_ii(i) = x_seq_padded(end);
+    f_limit_armijo_ii(i) = f_seq_padded(end);
 
     x_s_fmincon = [];
     f_s_fmincon = [];
@@ -148,8 +168,11 @@ f_s_kqp_mean_diminishing =  f_s_kqp_mean_diminishing / k;
 x_s_kqp_mean_polyak =  x_s_kqp_mean_polyak / k;
 f_s_kqp_mean_polyak =  f_s_kqp_mean_polyak / k;
 
-x_s_kqp_mean_armijo =  x_s_kqp_mean_armijo / k;
-f_s_kqp_mean_armijo =  f_s_kqp_mean_armijo / k;
+x_s_kqp_mean_armijo_i =  x_s_kqp_mean_armijo_i / k;
+f_s_kqp_mean_armijo_i =  f_s_kqp_mean_armijo_i / k;
+
+x_s_kqp_mean_armijo_ii =  x_s_kqp_mean_armijo_ii / k;
+f_s_kqp_mean_armijo_ii =  f_s_kqp_mean_armijo_ii / k;
 
 x_s_fmincon_mean =  x_s_fmincon_mean / k;
 f_s_fmincon_mean =  f_s_fmincon_mean / k;
@@ -168,9 +191,13 @@ fprintf("convergence time polyak step size, mean %d, std %d\n", mean(timing_kqp_
 fprintf("relative error on the x reached polyak step size, mean %d, var %d\n", mean(x_limit_polyak), var(x_limit_polyak));
 fprintf("relative error on the f reached polyak step size, mean %d, var %d\n\n", mean(f_limit_polyak), var(f_limit_polyak));
 
-fprintf("convergence time armijo step size, mean %d, std %d\n", mean(timing_kqp_armijo), std(timing_kqp_armijo));
-fprintf("relative error on the x reached armijo step size, mean %d, var %d\n", mean(x_limit_armijo), var(x_limit_armijo));
-fprintf("relative error on the f reached armijo step size, mean %d, var %d\n\n", mean(f_limit_armijo), var(f_limit_armijo));
+fprintf("convergence time armijo_i step size, mean %d, std %d\n", mean(timing_kqp_armijo_i), std(timing_kqp_armijo_i));
+fprintf("relative error on the x reached armijo_i step size, mean %d, var %d\n", mean(x_limit_armijo_i), var(x_limit_armijo_i));
+fprintf("relative error on the f reached armijo_i step size, mean %d, var %d\n\n", mean(f_limit_armijo_i), var(f_limit_armijo_i));
+
+fprintf("convergence time armijo_ii step size, mean %d, std %d\n", mean(timing_kqp_armijo_ii), std(timing_kqp_armijo_ii));
+fprintf("relative error on the x reached armijo_ii step size, mean %d, var %d\n", mean(x_limit_armijo_ii), var(x_limit_armijo_ii));
+fprintf("relative error on the f reached armijo_ii step size, mean %d, var %d\n\n", mean(f_limit_armijo_ii), var(f_limit_armijo_ii));
 
 fprintf("convergence time fmincon step size, mean %d, std %d\n", mean(timing_fmincon), std(timing_fmincon));
 fprintf("relative error on the x reached fmincon step size, mean %d, var %d\n", mean(x_limit_fmincon), var(x_limit_fmincon));
@@ -182,9 +209,10 @@ semilogy(x_s_kqp_mean_fs);
 hold on
 semilogy(x_s_kqp_mean_diminishing);
 semilogy(x_s_kqp_mean_polyak);
-semilogy(x_s_kqp_mean_armijo);
+semilogy(x_s_kqp_mean_armijo_i);
+semilogy(x_s_kqp_mean_armijo_ii);
 semilogy(x_s_fmincon_mean);
-legend('fixed','diminishing', 'polyak', 'armijo', 'fmincon');
+legend('fixed','diminishing', 'polyak', 'armijo_i', 'armijo_ii', 'fmincon');
 title('Relative norm of xs to x*');
 hold off
 
@@ -194,9 +222,10 @@ semilogy(f_s_kqp_mean_fs);
 hold on
 semilogy(f_s_kqp_mean_diminishing);
 semilogy(f_s_kqp_mean_polyak);
-semilogy(f_s_kqp_mean_armijo);
+semilogy(f_s_kqp_mean_armijo_i);
+semilogy(f_s_kqp_mean_armijo_ii);
 semilogy(f_s_fmincon_mean);
-legend('fixed','diminishing', 'polyak', 'armijo', 'fmincon');
+legend('fixed','diminishing', 'polyak', 'armijo_i', 'armijo_ii', 'fmincon');
 title('Relative norm of fs to f*');
 hold off
 
