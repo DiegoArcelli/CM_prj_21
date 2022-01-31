@@ -56,10 +56,10 @@ i = 0;
 wait_bar = waitbar(0,'Processing your data');
 
 % bunch_cel is the name of the bunch of problems
-for problem = bunch_cel
+for problem_instance = bunch_cel
     i = i+1;
     
-    p = problem{1};
+    p = problem_instance{1};
     
     Q = p.Q;
     q = p.q;
