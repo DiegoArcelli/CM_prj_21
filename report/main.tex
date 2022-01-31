@@ -123,16 +123,33 @@ Data la sequenza di iterazioni $\{x_k\}$ generate dal metodo di proiezione del s
 \subsubsection{Armijo Step Size}
 Trattiamo un'altra scelta del passo inesatta, il metodo di Armijo, i risultati sulla convergenza che verranno esplicitati fanno riferimento a \cite{gafni1982convergence} nel quale si dimostra la convergenza del metodo di discesa di gradiente proiettato con tale scelta del passo.\\
 Con il fine di alleggerire la notazione definiamo, per ogni $x$ nella regione ammissibile e $\alpha \geq 0$, l'arco di punti.
-\[x(\alpha) = project(x + \alpha \nabla f(x))\]
-Il metodo di Armijo seleziona ad ogni iterazione $\alpha_k = \beta^{m_k}s$, dove $m_k$ è il più piccolo intero non negativo $m$ tale che:
-\[f(x_k) -f(x_k(\beta^ms)) = \sigma \nabla f(x_k)'(x_k - x_k(\beta^ms))\]
-Dove $s > 0$, $\beta \in (0,1)$ e $\sigma \in (0,1)$ sono scalari fissati.\\
-Definito il passo di Armijo per la gradient projection, è noto il seguente.
+\[x(\alpha) = project(x - \alpha \nabla f(x))\]
+Sempre seguendo \cite{gafni1982convergence} definiamo il passo di armijo nel seguente modo.
+\[x^{k+1} = x^k + \gamma (x(\beta^k) - x^k).\]
+A tal punto esplicitiamo due possibili strategie per la scelta di $\gamma^k$ e $\beta^k$.\\
+
+i) Applicare armijo per ricercare lungo una direzione ammissibile, fissando $\beta$, $\sigma \in (0,1)$ e calcolando $\gamma^k = 2^{-l(k)}$. Dove.
+\[l(k) = \min \{j \in N : f(x^k + 2^{-j}(x(\beta^k) - x^k)) \leq f(x^k) - \sigma 2^{-j} \nabla f(x^k)'(x^k - x(\beta^k)) \}\]
+
+ii) Applicare armijo per ricercare lungo il confine C, fissando $\gamma^k = 1$, ${\hat{\beta} > 0}$ e cercando $\beta^k =\hat{\beta}2^{-l(k)}$. Dove. 
+\[l(k) = \min \{j \in N : f(x(\hat{\beta}2^{-j})) \leq f(x^k) - \sigma \nabla f(x^k)'(x^k - x(\hat{\beta}2^{-j})) \}\]
+Esplicitate queste due strategie, sono noti i due seguenti risultati di convergenza.\\
+Diamo d'apprima l'enunciato di convergenza per la strategia i) del passo di armijo.
 \begin{theorem}
-Sia $\{x_k\}$ una sequenza generata dall'algoritmo di discesa del gradiente proiettato con scelta del passo tramite metodo di Armijo, allora ogni punto limite di $\{x_k\}$ è stazionario.
+Dato il problema definito nella sezione introduttiva e l'algoritmo risolutivo definito nella presente trattazione, allora se viene considerata come selezione del passo la versione i) di armijo allora l'algoritmo si fermerà ad una certa iterazione k, nel qual caso $x^k$ è una soluzione, oppure verrà generata una sequenza infinita $\{x^k\}$, la quale converge alla soluzione ottimale del problema
+\end{theorem}
+Diamo infine l'enunciato di convergenza per la strategia ii) del passo di armijo.
+\begin{theorem}
+Se $\{x^k\}$ è una sequenza generata da ii) allora\\
+\begin{itemize}
+    \item $\{x^k\}$ appartiene alla regione ammissibile del problema.
+    \item $\beta^k$ definita da ii).
+    \item se $\nabla f(x^k) \neq 0$ allora $\langle \nabla f(x^k), x(\beta^k) - x^k \rangle < 0$.
+    \item Se il problema della presente ammette una soluzione e la sequenza $\{x^k\}$ converge, allora convergerà alla soluzione del problema.
+\end{itemize}
 \end{theorem}
 \section{Esperimenti}
-Nella presente sezione, dopo aver implementato l'algoritmo definito precedentemente, anderemo a verificare i risultati teorici riportati nella sezione precedente. Proporremo all'algoritmo risolutivo varie configurazioni, particolari e non, e soprattutto vedremo se il metodo riesce a gestire dimensioni molto del problema e quanto bene riesce a scalare.\\\\
+Nella presente sezione, dopo aver implementato l'algoritmo definito precedentemente, anderemo a verificare i risultati teorici riportati nella sezione precedente. Proporremo all'algoritmo risolutivo varie configurazioni, particolari e non, e soprattutto vedremo se il metodo riesce a gestire dimensioni molto grandi del problema e quanto bene riesce a scalare.\\\\
 bla bla bla
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
