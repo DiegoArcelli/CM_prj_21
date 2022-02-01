@@ -115,7 +115,7 @@ for problem_instance = bunch_cel
     f_limit_polyak(i) = f_seq_padded(end);
     
     tic;
-    [~, ~, x_s_kqp_armijo_i, f_s_kqp_armijo_i, g_s_kqp_armijo_i] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "armijo", {0.5, 0.01}, 0);
+    [~, ~, x_s_kqp_armijo_i, f_s_kqp_armijo_i, g_s_kqp_armijo_i] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "armijo", {0.5, 0.1}, 0);
     timing_kqp_armijo_i(i) = toc;        
     
     x_seq_padded = padding_sequence(vecnorm(x_s_kqp_armijo_i - x_star)/norm(x_star), max_iters);
@@ -128,7 +128,7 @@ for problem_instance = bunch_cel
     f_limit_armijo_i(i) = f_seq_padded(end);
     
     tic;
-    [~, ~, x_s_kqp_armijo_ii, f_s_kqp_armijo_ii, g_s_kqp_armijo_ii] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "armijo_ii", {0.5, 0.5}, 0);
+    [~, ~, x_s_kqp_armijo_ii, f_s_kqp_armijo_ii, g_s_kqp_armijo_ii] = KQP(Q, q, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "armijo_ii", {0.5, 0.1}, 0);
     timing_kqp_armijo_ii(i) = toc;        
     
     x_seq_padded = padding_sequence(vecnorm(x_s_kqp_armijo_ii - x_star)/norm(x_star), max_iters);
