@@ -3,7 +3,9 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage{amssymb}
+\usepackage{hyperref}
 \usepackage{algorithm2e}
+
 \RestyleAlgo{ruled}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -170,17 +172,21 @@ Sempre in una fase di screening iniziale abbiamo riscontrato il problema opposto
 Conoscendo la costante  Lipsitchzana l'agoritmo a passo fisso con $\alpha = \frac{1}{L}$, è riportato in \cite{gafni1982convergence} che  ci porta ad avere lo stesso rate di convergenza delle varianti dell'algoritmo di Armijo. Abbiamo quindi dovuto configurare i parametri $\hat{\beta}$ e $\sigma$. Dalla fase di screening iniziale abbiamo selezionato i parametri $\hat{\beta}= 0.5$ e $\sigma = 0.1$, i quali ci portano ad avere rate di convergenza simili a quel del passo fisso.
 \subsection{Generazione dati sperimentali}
 Nella presente sotto-sezione definiremo la modalità di creazione dei dati sperimentali.\\
-Per la creazione dei dati utilizzati negli esperimenti, riportati nella sotto-sezione successiva, abbiamo optato per una generazione randomica parametrizzata.\\
+Per la creazione dei dati utilizzati negli esperimenti, riportati nella sotto-sezione successiva, abbiamo optato per una generazione casuale parametrica.\\
 I parametri andranno a definire, la scala dei valori randomici e alcune proprietà della regione ammissibile e della funzione obiettivo rispetto a quest'ultima.\\
-I parametri della funzione di generazione di un problema sono: $scale$, $intersection\_percentage$ e $activ\_percentage$.\\
-Abbiamo anzitutto definito il box tramite i vettori $l$ e $u$, generati randomicamente in modo uniforme, $l$ tra 0 e $scale/2$ (estremi esclusi), mentre $u$ tra $l$ e $l + scale/2$ (estremi esclusi).\\
-Definito il box abbiamo definito in modo randomico uniformemente distribuito il vettore $a$ tra 0 e $scale$, per la generazione di $b$ abbiamo preso in considerazione il parametro $intersection_percentage$ che rappresenta, in percentuale, la masssima intersezione del semipiano ed il box constraint. Per far cio definiamo un bound sul valore di $b$, $b\_min = a'*l$ e $b\_max = a'*u$, genereremo perciò la $b$, in modo randomico uniforme, all'interno di questo range dal quale escluderemo in percentuale un offset da $b\_min$.\\
-Per la generazione della funzione obiettivo abbiamo costruito la matrice $Q$ dapprima definendo $A$, definita da una distribuzione uniforme riscalata per un valore $scale$, e poi ponendo $Q = A'A$.\\
-Infine definiamo l'utilizzo del parametro $activ\_percentage$, una volta definita la regione ammissibile, se il valore di tale parametro è settato allora indica in percentuale il numero di coordinate dell'ottimo del problema che appartengono al box. Tale metodo è stato ripreso dal codice proposto dal professore in classe seguendo [CITA].\\
-Abbiamo quindi la casistica in cui $activ_percentage$ non è settato e dunque $q$ verrà selezionato in modo randomico riscalato per $scale$.
-Mentre per la casistica in cui $activ_percentage$ ha assegnato un valore tra 0 e 1, allora $Q$ sarà generata in modo da risultare definita positiva, ed il vettore $q$ sarà generato in modo che le coordinate del minimo della funzione quadratica appertengono al box con una probabilità pari a $activ_percentage$.
+I parametri della funzione di generazione di un problema sono: \texttt{scale},\\
+\texttt{intersection\_percentage} e \texttt{activ\_percentage}.\\
+Abbiamo anzitutto definito il box tramite i vettori $l$ e $u$, generati randomicamente in modo uniforme, $l \in  (0, \frac{scale}{2})$, mentre $(l, l + \frac{scale}{2})$.\\
+Definito il box abbiamo definito in modo casuale uniformemente distribuito il vettore $a \in (0, scale)$, per la generazione di $b$ abbiamo preso in considerazione il parametro \texttt{intersection\_percentage} che rappresenta, in percentuale, la massima intersezione tra il semipiano ed il box constraint. Per far ciò definiamo un bound sul valore di $b$, $b_{min} = a'*l$ e $b_{max} = a'*u$, genereremo perciò la $b$, in modo casuale uniforme all'interno di questo intervallo, dal quale escluderemo in percentuale un offset da $b_{min}$.\\
+Abbiamo costruito la matrice $Q$ dapprima definendo $A$, i cui valori sono stati generati da una distribuzione uniforme riscalata per il valore $scale$, ponendo poi $Q = A'A$.\\
+Infine definiamo l'utilizzo del parametro \texttt{activ\_percentage}, una volta definita la regione ammissibile, se il valore di tale parametro è posto nell'intervallo $[0, 1]$ allora indicherà in percentuale il numero di coordinate del minimo della funzione obiettivo che apparterranno al box. Tale metodo è stato ripreso dal codice proposto dal professore in classe seguendo dunque il codice riportato in \href{https://elearning.di.unipi.it/pluginfile.php/47170/mod_resource/content/2/genBCQP.m}{\textit{link codice sorgente}}.\\
+Abbiamo quindi la casistica in cui \texttt{activ\_percentage} non è dato e dunque $q$ verrà selezionato tramite distribuzione normale riscalato per \texttt{scale}.
+Mentre per la casistica in cui \texttt{activ\_percentage} ha assegnato un valore tra 0 e 1, allora $Q$ sarà generata in modo da risultare definita positiva, ed il vettore $q$ sarà generato in modo che le coordinate del minimo della funzione quadratica appertengono al box con una probabilità pari ad \texttt{activ\_percentage}.
 \subsection{Setup e risultati degli esperimenti}
 bla bla bla
+\section{Support Vector Machine}
+\subsection{Formalizzazione del problema}
+\subsection{Esperimenti}
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \end{document}

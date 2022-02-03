@@ -38,7 +38,7 @@ u = repmat(C, [N, 1]);
 
 x_start = zeros([N, 1]);
 
-[alpha_star, f_star, x_s, f_s, g_s] = KQP(f, l, u, d_tr, 0, x_start, 10e-16, 10e-16, 1000, "diminishing", @(i) 1/i, 0, 1);
+[alpha_star, f_star, x_s, f_s, g_s] = KQP(f, l, u, d_tr, 0, x_start, 1e-15, 1e-15, 1000, "diminishing", @(i) 1/i, 0, 1);
 
 % options = optimoptions('fmincon', 'Display', 'off', 'Algorithm', 'active-set', 'OptimalityTolerance', 10e-15, 'ConstraintTolerance', 10e-15, 'MaxIterations', 1000, 'FunctionTolerance', 10e-16);
 % alpha_star = fmincon(f, x_start, [-eye(N); eye(N)], [-l; u], d_tr', 0, [], [], [], options);
