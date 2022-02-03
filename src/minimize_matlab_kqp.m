@@ -13,7 +13,7 @@ function [x_star_real, f_star_real] = minimize_matlab_kqp(x_start, Q, q, l, u, a
             'Display', 'off', ...
             'Algorithm', 'Interior-Point', ... % algorithm used
             'OptimalityTolerance', 1e-6, ... % For some large-scale problems with only linear equalities, the first-order optimality measure is the infinity norm of the projected gradient. In other words, the first-order optimality measure is the size of the gradient projected onto the null space of Aeq.
-            'ConstraintTolerance', 1e-6, ... % Tolerance on the constraint violation, a positive scalar
+            'ConstraintTolerance', 1e-15, ... % Tolerance on the constraint violation, a positive scalar
             'MaxIterations', max_iters, ... % Maximum number of iterations allowed, a positive integer
             'OutputFcn',@outfun, ... 
             'SpecifyObjectiveGradient', true); % specify that i'll pass the gradient to so not needed to compute by differentiation
