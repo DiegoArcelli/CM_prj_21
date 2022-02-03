@@ -115,17 +115,25 @@ Nella presente sotto-sezione come nella precedente faremo rifemento ai risultati
 Si è scelto di utilizzare il passo di Polyak modificato, poiché nella sua formulazione originale il metodo ha bisogno di avere accesso al valore di minimo della funzione obiettivo, la quale è un informazione che nel caso generale del nostro problema non possiamo avere, essendo la $Q$ semidefinita-positiva se il vettore $q$ è scelto non perpendicolare agli autovettori associato all'autovalore 0 di $Q$ allora $f$ sarà illimitata inferiormente e perciò non possiamo sapere quale è il valore di minimo nella regione ammissibile.\\
 Definiamo il passo,
 \[\alpha_k = \frac{f(x_k) - \hat{f_k}}{\|s_k\|^2} = \frac{f(x_k) - \min_{0 \leq j \leq k} f(x_j) + \delta}{\|s_k\|^2}.\]
-Dal quale si puo esplicitare il seguente risultato di convergenza del metodo.
+Dal quale in \cite{sgd_notes} viene dimostrato il seguente risultato di convergenza del metodo.
 \begin{theorem}
 Data la sequenza di iterazioni $\{x_k\}$ generate dal metodo di proiezione del sotto-gradiente con passo $\alpha_k$ del metodo di Polyak modificato, abbiamo che:
 \[\lim_{k \to \infty} \inf f(x_k) \leq f^* + \delta\]
 \end{theorem}
+Dal quale possiamo asserire che se $delta$ non viene fissato, ma contrariamente seguendo \cite{subgrad_method_slides}, viene definito ad ogni iterazione $\delta_k$ con le seguenti proprietà:\\
+\begin{itemize}
+    \item $\delta_k \to 0$
+    \item $\sum_k \delta_k = \infty$
+    \item $\sum_k \delta_k^2 < \infty$
+\end{itemize}
+Allora vale.
+\[\lim_{k \to \infty} \inf f(x_k) \leq f^*\]
 \subsubsection{Armijo Step Size}
 Trattiamo un'altra scelta del passo inesatta, il metodo di Armijo, i risultati sulla convergenza che verranno esplicitati fanno riferimento a \cite{gafni1982convergence} nel quale si dimostra la convergenza del metodo di discesa di gradiente proiettato con tale scelta del passo.\\
 Con il fine di alleggerire la notazione definiamo, per ogni $x$ nella regione ammissibile e $\alpha \geq 0$, l'arco di punti.
 \[x(\alpha) = project(x - \alpha \nabla f(x))\]
 Sempre seguendo \cite{gafni1982convergence} definiamo il passo di armijo nel seguente modo.
-\[x^{k+1} = x^k + \gamma (x(\beta^k) - x^k).\]
+\[x^{k+1} = x^k + \gamma^k (x(\beta^k) - x^k).\]
 A tal punto esplicitiamo due possibili strategie per la scelta di $\gamma^k$ e $\beta^k$.\\
 
 i) Applicare armijo per ricercare lungo una direzione ammissibile, fissando $\beta$, $\sigma \in (0,1)$ e calcolando $\gamma^k = 2^{-l(k)}$. Dove.
@@ -149,7 +157,20 @@ Se $\{x^k\}$ è una sequenza generata da ii) allora\\
 \end{itemize}
 \end{theorem}
 \section{Esperimenti}
-Nella presente sezione, dopo aver implementato l'algoritmo definito precedentemente, anderemo a verificare i risultati teorici riportati nella sezione precedente. Proporremo all'algoritmo risolutivo varie configurazioni, particolari e non, e soprattutto vedremo se il metodo riesce a gestire dimensioni molto grandi del problema e quanto bene riesce a scalare.\\\\
+Nella presente sezione, dopo aver implementato l'algoritmo definito precedentemente e le varianti definite dalle varie scelte del passo, anderemo a verificare i risultati teorici riportati nella sezione precedente. Proporremo all'algoritmo risolutivo varie configurazioni, particolari e non, e soprattutto vedremo se il metodo riesce a gestire dimensioni molto grandi del problema e quanto bene riesce a scalare. Infine daremo una comparazione con uno degli algoritmi implementati in matlab per la risoluzione di un problema di ottimizzazione vincolato.
+\subsection{Selezione dei parametri}
+Le varianti dell'algoritmo, come definito precedentemente comprendono algoritmi per la selezione del passo differenti, le quali procedure sono parametriche, andiamo perciò a definire i parametri utilizzati nei nostri esperimenti.
+\subsubsection{Passo fisso}
+Come dall'enunciato del teorema precedente il parametro migliore per la selezione tramite passo fisso è porre $\alpha = \frac{1}{L}$, dove $L$ è la costante di Lipsitchz della funzione obiettivo, che, nel nostro caso, sappiamo essere il massimo tra gli autovalori di $Q$.
+\subsubsection{Diminishing step size}
+Durante una prima fase di screening-phase si sono provate alcune sequenze di diminuzione del passo, che sostanzialmente consistono in una variazione a meno di costante moltiplicativa della sequenza $\frac{1}{k}$, dove $\frac{1}{k}$ è l'iterata attuale. Abbiamo empiricamente riscontrato che la scelta di $\frac{1}{k}$ portava alla selezione di passi troppo elevati nelle prime iterazioni dell'algoritmo all'aumentare della costante Lipsitchiana della funzione obiettivo, e complementarmente passi troppo piccoli al diminuire di $L$, perciò abbiamo pensato di riscalare la sequenza ed optato per $\delta_k = \frac{1}{Lk}$, la quale rimane nelle ipotesi di convergenza dell'algoritmo.
+\subsubsection{Polyak step size}
+Sempre in una fase di screening iniziale abbiamo riscontrato il problema opposto presente nelle sperimentazioni della selezione del passo diminishing, ovvero che all'aumnetare della costante $L$ la sequenza di $\delta_k = \frac{1}{k}$, con $k$ iterata corrente, portava ad avere step size troppo piccole nelle iterazioni iniziali, complementarmente al crescere di L. Abbiamo dunque optato per la sequenza $\delta_k = \frac{L^2}{k}$, la quale permette di compensare alla norma quadro del gradiente al denominatore che incideva altamente nell'ordine di grandezza del passo, inoltre tale sequenza rimane nelle ipotesi di convergenza dell'algoritmo.
+\subsubsection{Armijo step size}
+Conoscendo la costante  Lipsitchzana l'agoritmo a passo fisso con $\alpha = \frac{1}{L}$, è riportato in \cite{gafni1982convergence} che  ci porta ad avere lo stesso rate di convergenza delle varianti dell'algoritmo di Armijo. Abbiamo quindi dovuto configurare i parametri $\hat{\beta}$ e $\sigma$. Dalla fase di screening iniziale abbiamo selezionato i parametri $\hat{\beta}= 0.5$ e $\sigma = 0.1$, i quali ci portano ad avere rate di convergenza simili a quel del passo fisso.
+\subsection{Generazione dati sperimentali}
+bla bla bla
+\subsection{Setup e risultati degli esperimenti}
 bla bla bla
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
