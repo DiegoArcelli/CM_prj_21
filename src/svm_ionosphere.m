@@ -13,6 +13,7 @@ random_permutation = randperm(N);
 X = X(random_permutation, :);
 d = d(random_permutation);
 
+% taking 80% for training
 Tr_size = floor((N/100)*80);
 
 X_tr = X(1:Tr_size, :);
@@ -26,43 +27,88 @@ d_ts = d(Tr_size+1:end);
 % C parameter
 C = 10;
 
+% matlab solver
 tic();
 SVMModel = fitcsvm(X_tr,d_tr, 'BoxConstraint',C);
-toc();
+timinig_matlab_svm = toc();
 
-disp(compute_accuracy(SVMModel, X_tr, d_tr));
+tr_acc_matlab_svm = compute_accuracy(SVMModel, X_tr, d_tr);
+ts_acc_matlab_svm = compute_accuracy(SVMModel, X_ts, d_ts);
 
-disp(compute_accuracy(SVMModel, X_ts, d_ts));
+fprintf("Matlab svm solver: timinig = %d\n", timinig_matlab_svm);
+fprintf("Matlab svm solver: training accuracy = %0.2f\n", tr_acc_matlab_svm);
+fprintf("Matlab svm solver: test accuracy = %0.2f\n\n", ts_acc_matlab_svm);
 
+% fixed step size personal solver
 tic();
-mysvm = KQPSVM(C, "diminishing", @(i) 1/i);
+fixed_svm = KQPSVM(C, "fixed", 0.0001);
+fixed_svm = fixed_svm.fit(X_tr, d_tr);
+timinig_fixed = toc();
 
-mysvm = mysvm.fit(X_tr, d_tr);
-toc();
+tr_acc_fixed = compute_accuracy(fixed_svm, X_tr, d_tr);
+ts_acc_fixed = compute_accuracy(fixed_svm, X_ts, d_ts);
 
-disp(compute_accuracy(mysvm, X_tr, d_tr));
+fprintf("Fixed step size svm solver: timinig = %d\n", timinig_fixed);
+fprintf("Fixed step size svm solver: training accuracy = %0.2f\n", tr_acc_fixed);
+fprintf("Fixed step size svm solver: test accuracy = %0.2f\n\n", ts_acc_fixed);
 
-disp(compute_accuracy(mysvm, X_ts, d_ts));
-
+% diminishing step size personal solver
 tic();
-mysvm = KQPSVM(C, "polyak", @(i) 1/i);
+diminishing_svm = KQPSVM(C, "diminishing", @(i) 1/i);
 
-mysvm = mysvm.fit(X_tr, d_tr);
-toc();
+diminishing_svm = diminishing_svm.fit(X_tr, d_tr);
+timinig_diminishing = toc();
 
-disp(compute_accuracy(mysvm, X_tr, d_tr));
+tr_acc_diminishing = compute_accuracy(diminishing_svm, X_tr, d_tr);
+ts_acc_diminishing = compute_accuracy(diminishing_svm, X_ts, d_ts);
 
-disp(compute_accuracy(mysvm, X_ts, d_ts));
+fprintf("Diminishing step size svm solver: timinig = %d\n", timinig_diminishing);
+fprintf("Diminishing step size svm solver: training accuracy = %0.2f\n", tr_acc_diminishing);
+fprintf("Diminishing step size svm solver: test accuracy = %0.2f\n\n", ts_acc_diminishing);
 
+% polyak step size personal solver
 tic();
-mysvm = KQPSVM(C, "armijo", {0.5, 0.1});
+polyak_svm = KQPSVM(C, "polyak", @(i) 1/i);
 
-mysvm = mysvm.fit(X_tr, d_tr);
-toc();
+polyak_svm = polyak_svm.fit(X_tr, d_tr);
+timinig_polyak = toc();
 
-disp(compute_accuracy(mysvm, X_tr, d_tr));
+tr_acc_polyak = compute_accuracy(polyak_svm, X_tr, d_tr);
+ts_acc_polyak = compute_accuracy(polyak_svm, X_ts, d_ts);
 
-disp(compute_accuracy(mysvm, X_ts, d_ts));
+fprintf("Polyak step size svm solver: timinig = %d\n", timinig_polyak);
+fprintf("Polyak step size svm solver: training accuracy = %0.2f\n", tr_acc_polyak);
+fprintf("Polyak step size svm solver: test accuracy = %0.2f\n\n", ts_acc_polyak);
+
+% armijo step size personal solver
+tic();
+armijo_svm = KQPSVM(C, "armijo", {0.5, 0.1});
+
+armijo_svm = armijo_svm.fit(X_tr, d_tr);
+timinig_armijo = toc();
+
+tr_acc_armijo = compute_accuracy(armijo_svm, X_tr, d_tr);
+ts_acc_armijo = compute_accuracy(armijo_svm, X_ts, d_ts);
+
+fprintf("Armijo step size svm solver: timinig = %d\n", timinig_armijo);
+fprintf("Armijo step size svm solver: training accuracy = %0.2f\n", tr_acc_armijo);
+fprintf("Armijo step size svm solver: test accuracy = %0.2f\n\n", ts_acc_armijo);
+
+
+% armijo 2 step size personal solver
+tic();
+armijo_svm_ii = KQPSVM(C, "armijo_ii", {0.5, 0.1});
+
+armijo_svm_ii = armijo_svm_ii.fit(X_tr, d_tr);
+timinig_armijo_ii = toc();
+
+tr_acc_armijo_ii = compute_accuracy(armijo_svm_ii, X_tr, d_tr);
+ts_acc_armijo_ii = compute_accuracy(armijo_svm_ii, X_ts, d_ts);
+
+fprintf("Armijo 2 step size svm solver: timinig = %d\n", timinig_armijo_ii);
+fprintf("Armijo 2 step size svm solver: training accuracy = %0.2f\n", tr_acc_armijo_ii);
+fprintf("Armijo 2 step size svm solver: test accuracy = %0.2f\n\n", ts_acc_armijo_ii);
+
 
 
 function [accuracy] = compute_accuracy(model, X, d)
