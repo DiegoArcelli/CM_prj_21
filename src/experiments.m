@@ -205,18 +205,16 @@ fprintf("relative error on the f reached fmincon step size, mean %d, var %d\n\n"
 
 % plot the convergence curve
 
-semilogy(x_s_kqp_mean_fs);
-hold on
-semilogy(x_s_kqp_mean_diminishing);
-semilogy(x_s_kqp_mean_polyak);
-semilogy(x_s_kqp_mean_armijo_i);
-semilogy(x_s_kqp_mean_armijo_ii);
-semilogy(x_s_fmincon_mean);
-legend('fixed','diminishing', 'polyak', 'armijo_i', 'armijo_ii', 'fmincon');
-title('Relative norm of xs to x*');
-hold off
-
-input("");
+% semilogy(x_s_kqp_mean_fs);
+% hold on
+% semilogy(x_s_kqp_mean_diminishing);
+% semilogy(x_s_kqp_mean_polyak);
+% semilogy(x_s_kqp_mean_armijo_i);
+% semilogy(x_s_kqp_mean_armijo_ii);
+% semilogy(x_s_fmincon_mean);
+% legend('fixed','diminishing', 'polyak', 'armijo_i', 'armijo_ii', 'fmincon');
+% title('Relative norm of xs to x*');
+% hold off
 
 semilogy(f_s_kqp_mean_fs);
 hold on
@@ -229,6 +227,7 @@ legend('fixed','diminishing', 'polyak', 'armijo_i', 'armijo_ii', 'fmincon');
 title('Relative norm of fs to f*');
 hold off
 
+input("");
 
 function [seq] = padding_sequence(sequence, max_iter)
     % docstring

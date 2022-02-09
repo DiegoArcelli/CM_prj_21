@@ -6,9 +6,10 @@ function [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, intersection_p
     while any(l > u) || a'*u < b
         [l, u, a, b] = random_constraints(n, scale, intersection_percentage);
     end
-    
+
     is_invertible_Q = actv_percentage ~= -1;
     
+    A = randn(n, n)*scale;
     while is_invertible_Q
         A = randn(n, n)*scale;
         if rank(A) == n; break; end    % will be true nearly all the time
