@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{algorithm2e}
+\usepackage{multirow}
 
 \RestyleAlgo{ruled}
 
@@ -30,7 +31,7 @@ Il problema da noi selezionato è il numero 32 della sezione "progetti nonML".\\
 Il problema consiste nel trovare il minimo di una funzione quadratica, il cui dominio è vincolato, il problema nello specifico rientra nella tipologia "knapsack quadratic non-separable problems".\\
 \[\min \{x'Qx + q'x : a'x \geq b, l \leq x \leq u\}\]
 Dove $x \in \mathbb{R}^n$ mentre $q, a, l, u$  sono vettori fissati in $\mathbb{R}^n$ con $0 \leq l < u$, e $Q \in \mathbb{R}^{n \times n}$ è una matrice semi-definita positiva.\\
-La funzione obiettivo, a seconda della scelta di $Q$ e $q$, puo essere limitata inferiormente oppure no, di fatto, avendo un problema vincolato la nostra funzione ammetterà un unico punto di minimo nella regione ammissibile se non vuota, ciò deriva dal teorema di Weistrass, essendo la regione ammissibile un insieme chiuso e convesso.
+La funzione obiettivo, a seconda della scelta di $Q$ e $q$, puo essere limitata inferiormente oppure no, di fatto, avendo un problema vincolato la nostra funzione ammetterà un unico valore di minimo nella regione ammissibile se non vuota, ciò deriva dal teorema di Weistrass, essendo la regione ammissibile un insieme chiuso e convesso.
 \section{Algoritmo risolutivo}
 Per la risoluzione di tale problema, la traccia ci ha esplicitamente richiesto di utilizzare un metodo iterativo di discesa del gradiente, applicando però la tecnica della gradient projection, in quanto ci troviamo a dover minimizzare una funzione vincolata. Si è deciso di applicare la metodologia di Wolfe, la quale consiste, informalmente, nel calcolare il gradiente in un punto, muoversi nella direzione opposta utilizzando un qualche metodo di scelta del passo, e poi proiettare il punto trovato all'interno della regione ammissibile.\\
 Si presentano ora due problematiche, capire come proiettare il punto trovato ad ogni iterazione all'interno della regione ammissibile e capire quando fermarsi.
@@ -177,7 +178,7 @@ I parametri andranno a definire, la scala dei valori randomici e alcune propriet
 I parametri della funzione di generazione di un problema sono: \texttt{scale},\\
 \texttt{intersection\_percentage} e \texttt{activ\_percentage}.\\
 Abbiamo anzitutto definito il box tramite i vettori $l$ e $u$, generati randomicamente in modo uniforme, $l \in  (0, \frac{scale}{2})$, mentre $(l, l + \frac{scale}{2})$.\\
-Definito il box abbiamo definito in modo casuale uniformemente distribuito il vettore $a \in (0, scale)$, per la generazione di $b$ abbiamo preso in considerazione il parametro \texttt{intersection\_percentage} che rappresenta, in percentuale, la massima intersezione tra il semipiano ed il box constraint. Per far ciò definiamo un bound sul valore di $b$, $b_{min} = a'*l$ e $b_{max} = a'*u$, genereremo perciò la $b$, in modo casuale uniforme all'interno di questo intervallo, dal quale escluderemo in percentuale un offset da $b_{min}$.\\
+Definito il box abbiamo definito in modo casuale uniformemente distribuito il vettore $a \in (0, scale)$, per la generazione di $b$ abbiamo preso in considerazione il parametro \texttt{intersection\_percentage} che rappresenta, in percentuale, la massima intersezione tra il semipiano ed il box constraint. Per far ciò definiamo un bound sul valore di $b$, $b_{min} = a'l$ e $b_{max} = a'u$, genereremo perciò la $b$, in modo casuale uniforme all'interno di questo intervallo, dal quale escluderemo in percentuale un offset da $b_{min}$.\\
 Abbiamo costruito la matrice $Q$ dapprima definendo $A$, i cui valori sono stati generati da una distribuzione uniforme riscalata per il valore $scale$, ponendo poi $Q = A'A$.\\
 Infine definiamo l'utilizzo del parametro \texttt{activ\_percentage}, una volta definita la regione ammissibile, se il valore di tale parametro è posto nell'intervallo $[0, 1]$ allora indicherà in percentuale il numero di coordinate del minimo della funzione obiettivo che apparterranno al box. Tale metodo è stato ripreso dal codice proposto dal professore in classe seguendo dunque il codice riportato in \href{https://elearning.di.unipi.it/pluginfile.php/47170/mod_resource/content/2/genBCQP.m}{\textit{link codice sorgente}}.\\
 Abbiamo quindi la casistica in cui \texttt{activ\_percentage} non è dato e dunque $q$ verrà selezionato tramite distribuzione normale riscalato per \texttt{scale}.
@@ -185,8 +186,88 @@ Mentre per la casistica in cui \texttt{activ\_percentage} ha assegnato un valore
 \subsection{Setup e risultati degli esperimenti}
 bla bla bla
 \section{Support Vector Machine}
+Una versione leggermente diversa del problema di ottimizzazione quadratica esposto nella presente trattazione, è alla base del funzionamento delle macchine a vettori di supporto (SVM), ovvero dei modelli di machine learning sfruttati per classificazione e regressione.\\
+In questa sezione tratteremo la soft-margin svm lineare per la classificazione, tali modelli di apprendimento possono essere ampliati per la gestione di dati non linearmente separabili, tramite i kernel tricks.
+Non tratteremo l'utilizzo di tali modelli per la regressione, sono comunque ben noti metodologie per effettuare regressione, i quali si basano sugli stessi principi matematici sfruttati per effettuare classificazione.\\
+I risultati esposti e le notazioni, presenti nella sottosezione di formalizzazione del problema, sono stati ripresi in parte dalle slides del corso di \textbf{Machine Learnign}.
 \subsection{Formalizzazione del problema}
+Dato un insieme di dati $T = \{(x_i, d_i)\}_{i=1}^N$ L'obiettivo delle macchine a vettori di supporto con hard-margin è quello di trovare l'iperpiano separatore, definito da $w$ e $b$, tale che:
+\[d_i(w'x_i + b) \geq 1 \quad \forall i = 1, ..., N\]
+Di tutti gli iperpiani che soddisfano tali disequazioni, vogliamo quelli che hanno $\| w \|$ più piccola possibile, ciò ci garantisce avere il margine di separazione più ampio possibile, essendo la larghezza del margine inversamente proporzionale alla norma di $w$. Un margine ampio implica una capacità di generalizzazione migliore del modello.\\
+Un vettore di supporto $x^{(s)}$ è tale se $d^{(s)}(w'x^{(s)} +b) = 1$.\\
+Ci rendiamo conto dunque che trovare w in questo modo equivale a risolvere un problema di ottimizzazione convessa, essendo la funzione norma euclidea una funzione convessa. Essendo inoltre un problema con vincoli lineari, differenziabili quindi con una regione ammissibile convessa, valgono le condizioni KKT ed il teorema di dualità forte, per cui è possibile definirne e risolvere il duale, la cui forma risulta essere più conveniente avendo dimensionalità indipendente dalla dimensionalità del problema di partenza e  per l'utilizzo dei kernel tricks (altrimenti non applicabili). La forma del problema duale è la seguente.
+\begin{equation}
+\begin{aligned}
+\max_{\alpha} \quad & \sum_i \alpha_i - \frac{1}{2}\sum_i \sum_j \alpha_i \alpha_j d_i d_j x_i'x_j\\
+\textrm{s.t.} \quad & \sum_i \alpha_i d_i = 0\\
+  & \alpha_i \geq 0 \quad \forall i = 1, ..., N\\
+\end{aligned}
+\end{equation}
+Per ora abbiamo definito e formalizzato la linear svm hard-margin, la quale assume avere un dataset linearmente separabile senza outlier, assumiamo ora ammettere la presenza di punti che possono essere non perfettamente classificati dal margine separatore, definiamo dunque i modelli svm soft-margin.\\
+Introduciamo le slack variables $\xi_i \geq 0$, tali che,
+\[d_i(w'x_i + b) \geq 1 - \xi_i \quad \forall i = 1, ..., N\]
+I vettori di supporto saranno quei vettori tali che vale l'uguaglianza.\\
+Il problema primale, con l'aggiunta delle slack variables, è dunque:\\
+\begin{equation}
+\begin{aligned}
+\min_{w, b, \xi_i} \quad & \frac{1}{2} w'w + C \sum_i \xi_i\\
+\textrm{s.t.} \quad & d_i(w'x_i + b) \geq 1 - \xi_i \quad \forall i = 1, ..., N\\
+  & \xi_i \geq 0 \quad \forall i = 1, ..., N\\
+\end{aligned}
+\end{equation}
+Notiamo che anche in questo caso abbiamo una funzione obiettivo convessa cosi come la regione ammissibile, possiamo dunque passare al duale e risolvere tale problema.\\
+Costruiamo dapprima la lagrangiana del primale.
+\[ L = \frac{1}{2}w'w + C \sum_i \xi_i - \sum_i \alpha_i(d_i(w'x_i + b) - 1 + \xi_i) - \sum_i \mu_i \xi_i\]
+Dove gli $\alpha_i$ e i $\mu_i$ sono i moltiplicatori di lagrange relativi ai vincoli del primale. A tal punto vogliamo minimizzare la lagrangiana rispetto a $w$, $b$ e $\xi_i$ e massimizzarla rispetto ad $\alpha_i \geq 0$ e $\mu_i \geq 0$, procediamo dunque ponendo le derivate parziali uguali a 0, rispetto a $w$, $b$ e $\xi_i$, essendo le relative funzioni convesse.
+\[\frac{\partial L}{\partial w} = w - \sum_i \alpha_i d_i x_i = 0\]
+\[\frac{\partial L}{\partial b} = \sum_i \alpha_i d_i = 0\]
+\[\frac{\partial L}{\partial \xi_i} = C - \alpha_i - \mu_i = 0\]
+Porre uguale a 0 la derivata rispetto a $\xi_i$ ci porta ad avere $C - \mu_i - \alpha_i = 0$ e essendo dunque $\mu_i \geq 0$ abbiamo che $0 \leq \alpha_i \leq C$.\\
+Sostituiamo ora $w_o = \sum_i \alpha_i d_i x_i$ nella lagrangiana.\\
+\[\frac{1}{2}(\sum_i \alpha_i d_i x_i)'(\sum_j \alpha_j d_j x_j) - \sum_i \sum_j \alpha_i \alpha_j d_i d_j x_i'x_j + \sum_i \alpha_i - \sum_i \alpha_i d_i b - \sum_i (C - \mu_i - \alpha_i) \xi_i\]
+Applicando le uguaglianze date dalle derivate abbiamo che la funzione lagrangiana minimizzata rispetto ad $w$, $b$ e $\xi_i$ è data dalla seguente.
+\[\sum_i \alpha_i - \frac{1}{2}\sum_i \sum_j \alpha_i \alpha_j d_i d_j x_i'x_j\]
+A tal punto è diretta la formulazione del duale, mettendo insieme le equazioni dettate fin'ora.\\
+\begin{equation}
+\begin{aligned}
+\max_{\alpha} \quad & \sum_i \alpha_i - \frac{1}{2}\sum_i \sum_j \alpha_i \alpha_j d_i d_j x_i'x_j\\
+\textrm{s.t.} \quad & \sum_i \alpha_i d_i = 0\\
+  & 0 \leq \alpha_i \leq C \quad \forall i = 1, ..., N\\
+\end{aligned}
+\end{equation}
+\'E diretto notare che tale problema di ottimizzazione quadratica è affine al problema presentato nella prima parte della presente trattazione, l'unica differenza è quella di avere l'uguaglianza al posto della disuguaglianza nel vincolo di zaino.
+\'E comunque possibile applicare il metodo risolutivo del gradiente proiettato per trovare l'ottimo del duale, trovando un punto di minimo dell'opposto della funzione obiettivo e facendo una leggera modifica alla funzione di proiezione.
 \subsection{Esperimenti}
+Per fini didattici abbiamo implementato la soft-margin svm in matlab sfruttando il metodo risolutivo tramite gradiente proiettato per programmazione quadratica con vincoli di knapsack, abbiamo dunque confrontato tale metodo, utilizzando le diverse scelte del passo, con il metodo implementato dalla \texttt{fitcsvm} di matlab, disponibile tramite \texttt{statistics and machine learning toolbox}.
+Il dataset su cui abbiamo effettuato tali esperimenti è \texttt{Ionosphere} disponibile built-in in matlab. Tale dataset consiste in una matrice \texttt{X} di dimensioni 351(samples) x 34(features), contenente valori reali i quali rappresentano informazioni riguardanti la ionosfera. La variabile target è definita da un vettore \texttt{Y} contenente i valori 'g' e 'b', che indicano la qualità dei segnali radar. Per maggiorni informazioni si faccia riferimento a \cite{ionosphere_dataset}.\\
+Non si sono effettuate fasi di preprocessing dei dati di input, l'unica operazione sui dati effettuata è stata quella di trasformare il vettore \texttt{Y} sostituendo i valori 'g' con 1 e 'b' in -1.\\
+Prima di mettere a confronto i vari metodi, si è effettuata una fase di screening per la selezione (a grandi linee) dei parametri algoritmici, dalla quale si è selezionato il valore $C=10$.\\
+Nella tabella \ref{table:svmresults} si riportano, per ogni metodo, il tempo allenamento, il valore di accuracy nel dataset di training e testing, il valore di precision e recall per il dataset di testing.\\
+Notiamo come i valori di accuracy, precision e recall, sono abbastanza simili tra i vari metodi, mentre i valori di timing sono più elevati per le due varianti del metodo di Armijo, ciò è sicuramente dovuto alla ricerca di backtracking.\\
+\begin{table}[]
+    \centering
+    \begin{tabular}{ |p{3cm}||p{1.5cm}|p{2cm}|p{2cm}|p{2cm}|p{1.5cm}|  }
+    \hline
+    \multicolumn{6}{|c|}{Ionosphere dataset} \\
+    \hline
+    metodo & timing (s) & accuracy tr \% & accuracy ts \% & precision ts \% & recall ts \%\\
+    \hline
+    fitcsvm (MATLAB) & 0.69  & 95 & 83 & 78 & 72\\
+    \hline
+    Fixed ($\alpha = 0.001$) & 0.69 & 90 & 86 & 86 & 72\\
+    \hline
+    Diminishing ($\alpha_k = \frac{1}{k}$) & 0.64 & 94 & 76 & 67 & 64\\
+    \hline
+    Polyak ($\delta_k = \frac{1}{k}$) & 0.55 & 90 & 85 & 85 & 68\\
+    \hline
+    Armijo ($\beta = 0.5 \quad \sigma = 0.1$) & 5.24 & 91 & 80 & 72 & 72\\
+    \hline
+    Armijo 2 ($\beta = 0.5 \quad \sigma = 0.1$) & 1.79 & 90 & 82 & 80 & 64\\
+    \hline
+    \end{tabular}
+    \caption{Risultati SVM, Ionosphere dataset}
+    \label{table:svmresults}
+\end{table}
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \end{document}
