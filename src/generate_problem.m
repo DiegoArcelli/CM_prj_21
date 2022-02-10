@@ -3,10 +3,6 @@ function [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, intersection_p
 
     [l, u, a, b] = random_constraints(n, scale, intersection_percentage);
 
-    while any(l > u) || a'*u < b
-        [l, u, a, b] = random_constraints(n, scale, intersection_percentage);
-    end
-
     is_invertible_Q = actv_percentage ~= -1;
     
     A = randn(n, n)*scale;
@@ -59,14 +55,19 @@ end
 function [l, u, a, b] = random_constraints(n, scale, percentage)
     % docstring
 
-    a = rand(n, 1)*scale;    
+    a = rand(n, 1)*scale;
+    
     l = rand(n, 1)*(scale/2);
-    u = l + rand(n, 1)*(scale/2);
+    
+    u = repmat(-1, size(l));
+    while any(l > u)
+        u = l + rand(n, 1)*(scale/2);
+    end
     
     b_min = a'*l;
     b_max = a'*u;
         
-    offset_b = (b_max - b_min)*((1 - percentage)); 
+    offset_b = (b_max - b_min)*(1 - percentage);
     
     b_min = b_min + offset_b;
     

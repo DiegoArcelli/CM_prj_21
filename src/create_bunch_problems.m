@@ -1,10 +1,10 @@
 % actv_percentage = [-1, 0.2, 0.9]
 % inter_percentage = [0.2, 0.9]
 
-n = 100;
+n = 300;
 scale = 10;
 n_samples = 100;
-inter_per  = 0.9;
+inter_per  = 1;
 actv_per = -1;
 file_name = "bunch.mat";
 
