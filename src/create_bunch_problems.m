@@ -4,8 +4,9 @@
 n = 300;
 scale = 10;
 n_samples = 100;
-inter_per  = 1;
-actv_per = -1;
+inter_per  = 0.2;
+actv_per = 0.9;
+
 file_name = "bunch.mat";
 
 bunch_cel = cell(1, n_samples);
