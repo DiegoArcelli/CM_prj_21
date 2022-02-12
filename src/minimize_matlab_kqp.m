@@ -1,5 +1,27 @@
 function [x_star_real, f_star_real] = minimize_matlab_kqp(x_start, Q, q, l, u, a, b, max_iters, compute_optimum)
-    % docstring
+    % solve the minimization problem f(x) = x'Qx + q'x given the
+    % constraints a'x >= b and l <= x <= u using matlab built-in solver
+    % fmincon
+    % 
+    % input arguments:
+    % - x_start: the starting point of the algorithm
+    % - Q (a n x n positive semi-definite matrix) and q (a n dimensional vector) to
+    % represent the quadratic function to minimize
+    % - l, u, a (n dimensional vectors) and b (scalar) to define the feasible region
+    % - max_iters: the maximum number of iterations to compute the solution
+    % - compute_optimum: flag to 
+    %
+    % outputs:
+    % - x_star_real: the optimal point computed by fmincon
+    % - f_star_real: the value of function in the optimium point
+    % - copmpute_optimum: flag to set the global variables to 
+    %
+    % golabal variables (only if compute_optimum = false):
+    % - x_s_fmincon: the sequence of points computed by fmincon at each
+    % iteration
+    % - f_s_fmincon: the value of the function in the points computed at each
+    % iteration
+
     if compute_optimum
         options = optimoptions('fmincon', ...
             'Display', 'off', ...

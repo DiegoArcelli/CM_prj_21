@@ -1,8 +1,21 @@
 function [] = plot_execution(Q, q, l, u, a, b, x_s, y_s, mode, interactive)
-    % docstring
-    % mode = 1, it shows the execution considering only the projected points
-    % mode = 2, it shows the execution considering also the projections step
-    % mode = 3, both mode 1 and mode 2
+    % show the execution of the algorithm by plotting the level set of the
+    % function and the steps (if n = 2)
+
+    % input arguments:
+    % - Q (a 2 x 2 positive semi-definite matrix) and q (a 2 dimensional vector) to
+    % represent the quadratic function to minimize
+    % - l, u, a (2 dimensional vectors) and b (scalar) to define the feasible region
+    % - x_s: the sequence of points computed by the algorithm at each
+    % iteration
+    % - y_s: the sequence of points computed by the algorithm at each
+    % iteration before being projected
+    % - mode: allows to select thee different way of showing the steps of
+    % the algorithm
+    %   - 1, it shows the execution considering only the projected points
+    %   - 2, it shows the execution considering also the projections step
+    %   - 3, both mode 1 and mode 2
+    % interactive: flag to execute the function in interactive mode
 
     f = @(x,y) x^2*Q(1,1) + x*y*(Q(2,1) + Q(1,2)) + y^2*Q(2,2) + q(1)*x + q(2)*y;
     lin = @(x) (b-a(1)*x)/a(2);

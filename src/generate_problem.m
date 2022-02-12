@@ -1,5 +1,20 @@
 function [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, intersection_percentage, actv_percentage)
-    % docstring
+    % generate a random problem which can be solved by KQP.m
+    %
+    % input arguments:
+    % - n: the dimension of the problem 
+    % - scale: scalar to scale the values of the values of the generated
+    % parameters
+    % - intersection_percentage: percentage of intersection between the
+    % regions defined by a'x >= b and l <= x <= u
+    % - actv_percentage: tune how much the optimum point is outside from the
+    % beasible region (if Q is invertible)
+    %
+    % outputs:
+    % - Q (a n x n positive semi-definite matrix) and q (a n dimensional vector) to
+    % represent the quadratic function to minimize
+    % - l, u, a (n dimensional vectors) and b (scalar) to define the feasible region
+    % - x_start: the starting point of the problem
 
     [l, u, a, b] = random_constraints(n, scale, intersection_percentage);
 
@@ -53,7 +68,15 @@ end
 
 
 function [l, u, a, b] = random_constraints(n, scale, percentage)
-    % docstring
+    % generate random parameters for the constraints
+    % - n: dimension of the problem
+    % - scale: scalar to scale the values of the values of the generated
+    % parameters
+    % - percentage:  percentage of intersection between the
+    % regions defined by a'x >= b and l <= x <= u
+    % 
+    % outputs:
+    % - l, u, a (n dimensional vectors) and b (scalar) to define the feasible region
 
     a = rand(n, 1)*scale;
     
