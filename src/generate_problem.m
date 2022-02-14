@@ -29,15 +29,8 @@ function [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, intersection_p
     Q = A'*A;
 
     if is_invertible_Q
+        % taken from: https://elearning.di.unipi.it/pluginfile.php/47170/mod_resource/content/2/genBCQP.m
         % generate q- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        %
-        % We first generate the unconstrained minimum z of the problem in the form
-        %
-        %    min_x (1/2) ( x - z )^T * Q * ( x - z ) =
-        %          (1/2) x^T * Q * x - z^T * Q * x + (1/2) z^T * Q * z
-        %
-        % and then we set q = - z^T Q
-
         z = zeros( n , 1 );
 
         % outb( i ) = true if z( i ) will be out of the bounds

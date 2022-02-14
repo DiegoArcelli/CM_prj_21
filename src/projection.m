@@ -9,6 +9,9 @@ function [x_proj] = projection(l, u, a, b, y, eps, eq_knapsack)
     % feasible region
     % - y: the n dimensional vector to project into the feasible region
     % - eps: the precision required for the algorithm
+    % - eq_knapsack: boolean that indicates if the knapsack constraint is
+    % in equality or not (svm need equality)
+    %
     % output parameters:
     % -  x_proj: the projection of y into the feasible region 
 

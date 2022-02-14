@@ -7,8 +7,6 @@ d = zeros(size(Y));
 d(contains(Y, 'b')) = 1;
 d(contains(Y, 'g')) = -1;
 
-% ---> possibilità di fare 
-
 N = size(X); N = N(1);
 random_permutation = randperm(N);
 
@@ -45,6 +43,7 @@ fprintf("Matlab svm solver: test precision = %0.2f\n", ts_precision_matlab_svm);
 fprintf("Matlab svm solver: test recall = %0.2f\n\n", ts_recall_matlab_svm);
 
 % fixed step size personal solver
+
 tic();
 fixed_svm = KQPSVM(C, "fixed", 0.0001);
 fixed_svm = fixed_svm.fit(X_tr, d_tr);
@@ -61,6 +60,7 @@ fprintf("Fixed step size svm solver: test precision = %0.2f\n", ts_precision_fix
 fprintf("Fixed step size svm solver: test recall = %0.2f\n\n", ts_recall_fixed);
 
 % diminishing step size personal solver
+
 tic();
 diminishing_svm = KQPSVM(C, "diminishing", @(i) 1/i);
 
@@ -78,6 +78,7 @@ fprintf("Diminishing step size svm solver: test precision = %0.2f\n", ts_precisi
 fprintf("Diminishing step size svm solver: test recall = %0.2f\n\n", ts_recall_diminishing);
 
 % polyak step size personal solver
+
 tic();
 polyak_svm = KQPSVM(C, "polyak", @(i) 1/i);
 
@@ -95,6 +96,7 @@ fprintf("Polyak step size svm solver: test precision = %0.2f\n", ts_precision_po
 fprintf("Polyak step size svm solver: test recall = %0.2f\n\n", ts_recall_polyak);
 
 % armijo step size personal solver
+
 tic();
 armijo_svm = KQPSVM(C, "armijo", {0.5, 0.1});
 
@@ -113,6 +115,7 @@ fprintf("Armijo step size svm solver: test recall = %0.2f\n\n", ts_recall_armijo
 
 
 % armijo 2 step size personal solver
+
 tic();
 armijo_svm_ii = KQPSVM(C, "armijo_ii", {0.5, 0.1});
 

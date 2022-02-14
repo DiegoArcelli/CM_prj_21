@@ -25,6 +25,8 @@ function [x_star, f_star, x_s, f_s, g_s] = KQP(f, l, u, a, b, x_start, eps, eps_
     %   parameters of the algorithm beta and sigma
     % - verbose: boolean variable to show or suppress the output of the
     % algorithm
+    % - eq_knapsack: boolean that indicates if the knapsack constraint is
+    % in equality or not (svm need equality)
     %
     % output arguments:
     % - x_star: the optimal point computed by the algorithm
