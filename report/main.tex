@@ -92,8 +92,8 @@ Per la selezione del passo dell'algoritmo di discesa di gradiente abbiamo varie 
 \end{itemize}
 \subsubsection{Constant Step Size}
 I risultati teorici riportati in questa sotto sezione sono stati ripresi da \cite{notesfirstom}.\\
-Data la funzione obiettivo $f$ convessa (non strettamente), la discesa del gradiente proiettato converge sub-linearmente.\\
-\'E noto il seguente lemma il quale ci garantisce la convergenza del metodo.\\
+\'E diretto notare che la funzione obiettivo del nostro problema di ottimizzazione è $L$-continua, dove la costante $L$ è pari al massimo degli autovalori della matrice $Q$, inoltre è una funzione convessa (non strettamente), dunque si può dimostrare che la discesa del gradiente proiettato a passo fisso converge sub-linearmente.\\
+\'E noto il seguente lemma il quale ci garantisce la convergenza del metodo
 \begin{lemma}[Ref: Lemma 5.2 pag. 18 in \cite{notesfirstom}]
 Assumendo:
 \begin{itemize}
@@ -103,7 +103,7 @@ Assumendo:
 Allora la discesa del gradiente proiettato con passo $\frac{1}{L}$ soddisfa:
 \[f(x_{k+1}) \leq f(x_k) - \frac{L}{2}\|x_{k+1} - x_k\|^2 \]
 \end{lemma}
-Da cui è ricavabile il seguente teorema, il quale ci garantisce che il metodo richiede al più $O(\frac{L}{\epsilon})$ iterazioni per ottenere un punto distante al più $\epsilon$ dal punto ottimo.
+Da cui è ricavabile il seguente teorema, il quale ci garantisce che il metodo richiede $O(\frac{L}{\epsilon})$ iterazioni per ottenere un punto distante al più $\epsilon$ dal punto ottimo.
 \begin{theorem}[Ref: Teorema 5.3 pag. 19 in \cite{notesfirstom}]
 Sotto le condizioni del lemma precedente, il metodo di discesa del gradiente proiettato con passo $\frac{1}{L}$ soddisfa:
 \[f(x_k) - f^* \leq \frac{L}{2k}\| x^* - x_0 \|^2\]
@@ -139,6 +139,7 @@ Dal quale possiamo asserire che se $\delta$ non viene fissato, ma contrariamente
 \end{itemize}
 Allora vale.
 \[\lim_{k \to \infty} \inf f(x_k) \leq f^*\]
+\'E giusto chiarire che esistono metodologie differenti per la stima del minimo di $f$ da quello riportato nella presente, le quali agiscono iterativamente effettuando delle approssimazioni.
 \subsubsection{Armijo Step Size}
 Trattiamo un'altra scelta del passo inesatta, il metodo di Armijo, i risultati sulla convergenza che verranno esplicitati fanno riferimento a \cite{gafni1982convergence} nel quale si dimostra la convergenza del metodo di discesa di gradiente proiettato con tale scelta del passo.\\
 Con il fine di alleggerire la notazione definiamo, per ogni $x$ nella regione ammissibile e $\alpha \geq 0$, l'arco di punti.
