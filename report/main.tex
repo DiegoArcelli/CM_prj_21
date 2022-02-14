@@ -1,7 +1,11 @@
-\documentclass{article}
+\documentclass[12pt]{extarticle}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage[export]{adjustbox}
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{algorithm2e}
@@ -13,30 +17,32 @@
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{lemma}[theorem]{Lemma}
 
+\newcommand{\quotes}[1]{``#1''}
+
 \title{CM project}
 \author{Luca Moroni, Diego Arcelli}
 \date{December 2021}
+
+\linespread{1.2}
+\usepackage[a4paper,margin=1in,footskip=0.25in]{geometry}
+
 
 \begin{document}
 
 \maketitle
 
 \section{Introduzione}
-In questa sezione andremo a definire il problema soggetto del presente elaborato.\\
-Partiamo prima però con un richiamo alle notazioni utilizzate e qualche preliminare tecnico.
-\subsection{Notazioni}
-bla bla bla
+In questa sezione andremo a definire il problema soggetto del presente elaborato. Il problema da noi selezionato è il numero 32 della sezione   \quotes{progetti nonML}.
 \subsection{Il problema}
-Il problema da noi selezionato è il numero 32 della sezione "progetti nonML".\\
-Il problema consiste nel trovare il minimo di una funzione quadratica, il cui dominio è vincolato, il problema nello specifico rientra nella tipologia "knapsack quadratic non-separable problems".\\
-\[\min \{x'Qx + q'x : a'x \geq b, l \leq x \leq u\}\]
+Il problema consiste nel trovare il minimo di una funzione quadratica, il cui dominio è vincolato, il problema nello specifico rientra nella tipologia \quotes{knapsack quadratic non-separable problems}.\\
+\[\min_x \{x'Qx + q'x : a'x \geq b, l \leq x \leq u\}\]
 Dove $x \in \mathbb{R}^n$ mentre $q, a, l, u$  sono vettori fissati in $\mathbb{R}^n$ con $0 \leq l < u$, e $Q \in \mathbb{R}^{n \times n}$ è una matrice semi-definita positiva.\\
-La funzione obiettivo, a seconda della scelta di $Q$ e $q$, puo essere limitata inferiormente oppure no, di fatto, avendo un problema vincolato la nostra funzione ammetterà un unico valore di minimo nella regione ammissibile se non vuota, ciò deriva dal teorema di Weistrass, essendo la regione ammissibile un insieme chiuso e convesso.
+La funzione obiettivo, a seconda della scelta di $Q$ e $q$, puo essere limitata inferiormente oppure no, nel caso di matrice con autovalori non strettamente positivi è possibile avere funzioni non limitate inferiormente. Avendo un problema vincolato la nostra funzione ammetterà un unico valore di minimo nella regione ammissibile se non vuota, rientrando nelle ipotesi del teorema del valore estremo di Weirestrass, ovvero, la nostra funzione obiettivo è continua ed la nostra regione ammissibile, se non vuota, è chiusa e limitata ovvero un insieme compatto. Non è garantita invece l'unicità del punto di minimo.
 \section{Algoritmo risolutivo}
-Per la risoluzione di tale problema, la traccia ci ha esplicitamente richiesto di utilizzare un metodo iterativo di discesa del gradiente, applicando però la tecnica della gradient projection, in quanto ci troviamo a dover minimizzare una funzione vincolata. Si è deciso di applicare la metodologia di Wolfe, la quale consiste, informalmente, nel calcolare il gradiente in un punto, muoversi nella direzione opposta utilizzando un qualche metodo di scelta del passo, e poi proiettare il punto trovato all'interno della regione ammissibile.\\
+Per la risoluzione di tale problema la traccia ci ha esplicitamente richiesto di utilizzare un metodo iterativo di discesa del gradiente, applicando però la tecnica della gradient projection in quanto ci troviamo a dover minimizzare una funzione vincolata. Si è deciso di applicare la metodologia di Wolfe la quale consiste, informalmente, nel calcolare il gradiente in un punto, muoversi nella direzione opposta utilizzando un qualche metodo di scelta del passo, e poi proiettare il punto trovato all'interno della regione ammissibile.\\
 Si presentano ora due problematiche, capire come proiettare il punto trovato ad ogni iterazione all'interno della regione ammissibile e capire quando fermarsi.
 Quest'ultima problematica viene risolta basandosi sul fatto che in un problema di ottimizzazione vincolato un punto stazionario è un punto $x$ tale che $x = projection(x + \alpha\nabla f(x))$ $\forall \alpha \geq 0$.\\
-Definendo come stopping criteria la condizione che la norma della differenza tra la proiezione del punto successivo e il punto attuale sia minore di un certo valore soglia $\epsilon$. Al netto di un passo sufficientemente grande (tratteremo questo aspetto in una sottosezione successiva) abbiamo due casi, nel caso in cui il punto successivo sia interno alla regione ammissibile, allora questo stopping criteria si attiverà quando il gradiente è vicino a 0 e data la convessita della funzione obiettivo è condizione necessaria e sufficiente per l'ottimalità del punto. Nel caso in cui lo spostamento ci porta fuori dalla regione ammissibile se la proiezione ci porterà sul bordo molto vicino al punto del passo precedente allora la direzione di spostamento, ovvero l'antigradiente, approssimativamente (per $\epsilon$ abbastanza piccolo) apparterrà al cono duale, generato dai vincoli che rappresentano il bordo della regione ammissibile, quindi per il lemma di Farkas ogni direzione $d$ appartenente all'insieme delle direzioni ammissibili è una direzione di crescita in quanto $\nabla f(x)'d \geq 0$, perciò il punto è un punto di minimo locale nella regione ammissibile. Si faccia riferimento a \cite{pgm_method} per una riscontro formale.\\
+Definiamo dunque come stopping criteria la condizione che la norma della differenza tra la proiezione del punto successivo e il punto attuale sia minore di un certo valore soglia $\epsilon$. Al netto di un passo sufficientemente grande (tratteremo questo aspetto in una sottosezione successiva) abbiamo due casi. Nel caso in cui il punto successivo sia interno alla regione ammissibile, allora questo stopping criteria si attiverà quando il gradiente è vicino a 0 e data la convessita della funzione obiettivo è condizione necessaria e sufficiente per l'ottimalità del punto. Nel caso in cui lo spostamento ci porta fuori dalla regione ammissibile, se la proiezione ci porterà sul bordo molto vicino al punto del passo precedente allora la direzione di spostamento, ovvero l'antigradiente, approssimativamente (per $\epsilon$ abbastanza piccolo) apparterrà al cono duale, generato dai vincoli che rappresentano il bordo della regione ammissibile, quindi per il lemma di Farkas ogni direzione $d$ appartenente all'insieme delle direzioni ammissibili è una direzione di crescita in quanto $\nabla f(x)'d \geq 0$, perciò il punto è un punto di minimo locale nella regione ammissibile. Si faccia riferimento a \cite{pgm_method} per una riscontro formale.\\
 Per quanto riguarda invece la tecnica di proiezione la descriveremo nella seguente sottosezione.
 \SetKwComment{Comment}{/* }{ */}
 \begin{algorithm}
@@ -51,18 +57,19 @@ Per quanto riguarda invece la tecnica di proiezione la descriveremo nella seguen
 \end{algorithm}
 \subsection{Metodo di proiezione}
 Una volta calcolato il punto derivante dal passo di discesa del gradiente si verifica l'appartenenza alla regione ammissibile, nel qual caso la proiezione non avrà alcun effetto, nel caso, invece in cui il punto esca fuori dalla regione ammissibile, definiamo la proiezione come il punto appartenente alla regione ammissibile che minimizza la distanza euclidea dal punto calcolato. Dall'impostazione appena esplicitata ci rendiamo conto che il problema della proiezione è un problema analogo a quello di partenza ma piu semplice, definiamolo formalmente.
-\[\min \{\|x - \hat{x} \|_2^2 : a'x \geq b, l \leq x \leq u \}\]
+\[\min_{x} \{\|x - \hat{x} \|_2^2 : a'x \geq b, l \leq x \leq u \}\]
 Dove $a, b, l, u$ sono definite come nella formulazione del problema originale, ed $\hat{x}$ è il vettore rappresentante il punto derivante dal passo di discesa del gradiente.\\
 Riscriviamo la funzione obiettivo del problema di proiezione.
-\[\min \{(x - \hat{x})'I(x - \hat{x}) : a'x \geq b, l \leq x \leq u \}\]
-Dove $I$ è la matrice identità. Il problema di Proiezione è definito come Knapsack Separable Quadratic Problem, e per questa specifica tipologia esistono metodi risolutivi che non richiedono la discesa del gradiente. Prima di addentrarci nella descrizione del metodo riformuliamo il problema.\\
+\[\min_x \{(x - \hat{x})'I(x - \hat{x}) : a'x \geq b, l \leq x \leq u \}\]
+Dove $I$ è la matrice identità. Il problema di Proiezione è definito come \texttt{Knapsack Separable Quadratic Problem}, per questa specifica tipologia esistono metodi risolutivi che non richiedono la discesa del gradiente. Prima di addentrarci nella descrizione del metodo riformuliamo il problema.\\
 Definiamo $\widetilde{x} = x - \hat{x}$ e perciò $x = \widetilde{x} + \hat{x}$ sostituendo abbiamo che, $\widetilde{x} \geq l - \hat{x}$, $\widetilde{x} \leq u - \hat{x}$ definiamo perciò $\widetilde{l} = l - \hat{x}$ e $\widetilde{u} = u - \hat{x}$, inoltre il vincolo $a'x \geq b$ diventa $a'\widetilde{x} \geq b - a'\hat{x}$ volendo inoltre essere consistenti con la formulazione del problema in [2] dobbiamo trasformare tale vincolo nel seguente $-a'\widetilde{x} \leq -(b - a'\hat{x})$ e definiamo $\widetilde{a} = -a$ e $\widetilde{b} = -(b - a'\hat{x})$.
-\[\min \{\widetilde{x}'I\widetilde{x} : \widetilde{a}'\widetilde{x} \leq \widetilde{b}, \widetilde{l} \leq \widetilde{x} \leq \widetilde{u} \}\]
-Abbiamo ora un problema consistente con la formulazione presente in \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081}. Facendo sempre riferimento a \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081}, nei quali articoli sono esplicitate varie metodologie risolutive di un problema del tipo Knapsack Separable Quadratic Problem, abbiamo deciso di utilizzare il Lagrange multiplier search method, chiamato anche break point search method, nello specifico per la ricerca nei break points (che definiremo) applicheremo il metodo tramite sorting, definito anche metodo di ranking.\\
+\[\min_{\widetilde{x}} \{\widetilde{x}'I\widetilde{x} : \widetilde{a}'\widetilde{x} \leq \widetilde{b}, \widetilde{l} \leq \widetilde{x} \leq \widetilde{u} \}\]
+Abbiamo ora un problema consistente con la formulazione presente in \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081}. Facendo sempre riferimento a \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081}, nei quali articoli sono esplicitate varie metodologie risolutive di un problema del tipo \texttt{Knapsack Separable Quadratic Problem}, abbiamo deciso di utilizzare il \texttt{Lagrange multiplier search method}, chiamato anche \texttt{break point search method}, nello specifico per la ricerca nei break points (che definiremo) applicheremo il metodo tramite sorting, definito anche \texttt{metodo di ranking}.\\
 Seguendo \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081} riformuliamo la derivazione del metodo risolutivo per il nostro problema.\\
-Costruiamo la funzione duale lagrangiana (togliamo dalla notazione la tilde per rendere più leggera la notazione)
+Costruiamo la funzione duale lagrangiana (togliamo dalla notazione la tilde per rendere il tutto più leggibile)
 \[q(\mu) = -b\mu + \sum_j { min_{x_j \in X_j} \{x_j^2 + \mu a_j x_j\}}\]
-$x_j \in X_j$ indica che la j-esima componente di $x$ deve essere compresa nel box constrain, stiamo cercando di risolvere il problema applicando la definizione di duale prendendo in considerazione solamente il vincolo di disuguaglianza. Ne segue.
+$x_j \in X_j$ indica che la j-esima componente di $x$ deve essere compresa nel box constrain, stiamo cercando di risolvere il problema applicando la definizione di duale prendendo in considerazione solamente il vincolo di disuguaglianza.\\
+Ne segue.
 \[q'(\mu) = -b + \sum_j { a_j x_j(\mu)}\]
 Dove $x_j(\mu)$ è il minimo (unico) rispetto al box constraint ed è definito come segue.
 \begin{equation}
@@ -72,10 +79,11 @@ Dove $x_j(\mu)$ è il minimo (unico) rispetto al box constraint ed è definito c
       x_j : \mu = -2x_j/a_j
     \end{cases}
 \end{equation}
-Come esplicitato in \cite{Jeong2014IndefiniteKS} possiamo vedere $x_j(\mu) = median \{l_j, u_j, \mu\}$. Definimamo $\mu_j^+ = -2l_j/a_j$ e $\mu_j^- = -2u_j/a_j$ i quali sono punti significativi in quanto, la funzione $q'(\mu)$ è una funzione non cresente lineare a tratti i quali tratti sono delineati dai punti $\mu_j^+$ e $\mu_j^-$. A tal proposito, seguendo sempre \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081} dobbiamo trovare il valore $\mu^*$ tale per cui $q'(\mu^*) = 0$ il quale ci restituirà il punto ottimo $x(\mu^*)$ dal quale possiamo ricavare il punto proiettato, il quale soddisfa le condizioni KKT necessarie a definirlo un punto di minimo. Per trovare il valore di $\mu^*$, utilizzando il metodo di ranking, ordiniamo dapprima i valori di $\mu_j^+$ e $\mu_j^-$ la quale operazione richiede O(n log n) e tramite una ricerca dicotomica cerchiamo il break point che pone a zero $q'$ oppure troviamo la coppia $\mu_{j^-}$ e $\mu_{j^+}$ tale che $q'(\mu_{j^-}) > 0$ e $q'(\mu_{j^+}) < 0$ i quali ci definiscono un intervallo nel quale la funzione $q'$ è lineare, perciò trovarne lo zero diventa un operazione diretta.\\
-Il metodo risolutivo nel suo complesso richiede tempo O(n log n) dove n è il numero di variabili del problema.
+Come esplicitato in \cite{Jeong2014IndefiniteKS} possiamo vedere $x_j(\mu) = median \{l_j, u_j, \mu\}$. Definimamo $\mu_j^+ = -2l_j/a_j$ e $\mu_j^- = -2u_j/a_j$ i quali sono punti significativi in quanto, la funzione $q'(\mu)$ è una funzione non cresente lineare a tratti i quali tratti sono delineati dai punti $\mu_j^+$ e $\mu_j^-$. A tal proposito, seguendo sempre \cite{Jeong2014IndefiniteKS} e \cite{PATRIKSSON20081} dobbiamo trovare il valore $\mu^* \geq 0$ tale per cui $q(\mu^*)$ è minimizzata, il quale ci restituirà il punto ottimo $x(\mu^*)$ dal quale possiamo ricavare il punto proiettato, soddisfando dunque le condizioni KKT necessarie a definirlo un punto di minimo. Trattiamo anzitutto la casistica in cui $\exists \mu^* \geq 0 : q'(\mu^*) = 0$ utilizzando il metodo di ranking, ordiniamo dapprima i valori di $\mu_j^+$ e $\mu_j^-$ la quale operazione richiede O(n log n) e tramite una ricerca dicotomica cerchiamo il break point che pone a zero $q'$, oppure troviamo la coppia $\mu_{j^-}$ e $\mu_{j^+}$ tale che $q'(\mu_{j^-}) > 0$ e $q'(\mu_{j^+}) < 0$ i quali ci definiscono un intervallo nel quale la funzione $q'$ è lineare, perciò trovarne lo zero diventa un operazione diretta. Notiamo infine che, se $\forall j : \mu_j \geq 0 \implies q'(\mu_j) < 0$ allora la soluzione è trovata ponendo $\mu^*  = 0$.\\
+\'E possibile trovare un riscontro pratico di questo metodo risolutivo anche in \cite{bretthauer1995nonlinear}.\\
+Il metodo di proiezione nel suo complesso richiede tempo $O(n \log n)$ dove $n$ è il numero di variabili del problema.
 \subsection{Metodi di scelta del passo}
-Per la selezione del passo dell'algoritmo di discesa di gradiente abbiamo varie scelte, come visto a lezione, nella presente trattazione faremo riferimento ai seguenti metodi:
+Per la selezione del passo dell'algoritmo di discesa di gradiente abbiamo varie scelte come visto a lezione, nella presente trattazione faremo riferimento ai seguenti metodi:
 \begin{itemize}
     \item Constant step size
     \item Diminishing step size
@@ -85,8 +93,8 @@ Per la selezione del passo dell'algoritmo di discesa di gradiente abbiamo varie 
 \subsubsection{Constant Step Size}
 I risultati teorici riportati in questa sotto sezione sono stati ripresi da \cite{notesfirstom}.\\
 Data la funzione obiettivo $f$ convessa (non strettamente), la discesa del gradiente proiettato converge sub-linearmente.\\
-\'E noto il seguente lemma il quale ci garantisce la convergenza del metodo. 
-\begin{lemma}
+\'E noto il seguente lemma il quale ci garantisce la convergenza del metodo.\\
+\begin{lemma}[Ref: Lemma 5.2 pag. 18 in \cite{notesfirstom}]
 Assumendo:
 \begin{itemize}
     \item $f : \mathbb{R}^n \to \mathbb{R}$ L-continua.
@@ -96,7 +104,7 @@ Allora la discesa del gradiente proiettato con passo $\frac{1}{L}$ soddisfa:
 \[f(x_{k+1}) \leq f(x_k) - \frac{L}{2}\|x_{k+1} - x_k\|^2 \]
 \end{lemma}
 Da cui è ricavabile il seguente teorema, il quale ci garantisce che il metodo richiede al più $O(\frac{L}{\epsilon})$ iterazioni per ottenere un punto distante al più $\epsilon$ dal punto ottimo.
-\begin{theorem}
+\begin{theorem}[Ref: Teorema 5.3 pag. 19 in \cite{notesfirstom}]
 Sotto le condizioni del lemma precedente, il metodo di discesa del gradiente proiettato con passo $\frac{1}{L}$ soddisfa:
 \[f(x_k) - f^* \leq \frac{L}{2k}\| x^* - x_0 \|^2\]
 \end{theorem}
@@ -109,7 +117,7 @@ Assumiamo di selezionare un passo che ad ogni iterazione diminuisce con le segue
     \item $\sum_k \alpha_k^2 < \infty$
 \end{itemize}
 Essendo sicura l'esistenza di un minimo nel caso di regione ammissibile non vuota, possiamo essere sicuri che il metodo converga dal seguente enunciato.
-\begin{theorem}
+\begin{theorem}[Ref: Teorema 3 pag. 5 in \cite{sgd_notes}]
 Date le assunzioni precedentemente fatte su $\alpha_k$ allora per la sequenza $\{x_k\}$ generata dal metodo di discesa di sotto-gradiente proiettato con $\alpha_k$ come passo, abbiamo che:
 \[\lim_{k \to \infty} \| x_k - x^*\| = 0\]
 \end{theorem}
@@ -119,11 +127,11 @@ Si è scelto di utilizzare il passo di Polyak modificato, poiché nella sua form
 Definiamo il passo,
 \[\alpha_k = \frac{f(x_k) - \hat{f_k}}{\|s_k\|^2} = \frac{f(x_k) - \min_{0 \leq j \leq k} f(x_j) + \delta}{\|s_k\|^2}.\]
 Dal quale in \cite{sgd_notes} viene dimostrato il seguente risultato di convergenza del metodo.
-\begin{theorem}
+\begin{theorem}[Ref: Teorema 5 pag. 8 in \cite{sgd_notes}]
 Data la sequenza di iterazioni $\{x_k\}$ generate dal metodo di proiezione del sotto-gradiente con passo $\alpha_k$ del metodo di Polyak modificato, abbiamo che:
 \[\lim_{k \to \infty} \inf f(x_k) \leq f^* + \delta\]
 \end{theorem}
-Dal quale possiamo asserire che se $delta$ non viene fissato, ma contrariamente seguendo \cite{subgrad_method_slides}, viene definito ad ogni iterazione $\delta_k$ con le seguenti proprietà:\\
+Dal quale possiamo asserire che se $\delta$ non viene fissato, ma contrariamente seguendo \cite{subgrad_method_slides}, viene definito ad ogni iterazione $\delta_k$ con le seguenti proprietà:\\
 \begin{itemize}
     \item $\delta_k \to 0$
     \item $\sum_k \delta_k = \infty$
@@ -139,25 +147,26 @@ Sempre seguendo \cite{gafni1982convergence} definiamo il passo di armijo nel seg
 \[x^{k+1} = x^k + \gamma^k (x(\beta^k) - x^k).\]
 A tal punto esplicitiamo due possibili strategie per la scelta di $\gamma^k$ e $\beta^k$.\\
 
-i) Applicare armijo per ricercare lungo una direzione ammissibile, fissando $\beta$, $\sigma \in (0,1)$ e calcolando $\gamma^k = 2^{-l(k)}$. Dove.
+i) Applicare armijo per ricercare lungo il confine C, fissando $\gamma^k = 1$, ${\hat{\beta} > 0}$ e cercando $\beta^k =\hat{\beta}2^{-l(k)}$. Dove. 
+\[l(k) = \min \{j \in N : f(x(\hat{\beta}2^{-j})) \leq f(x^k) - \sigma \nabla f(x^k)'(x^k - x(\hat{\beta}2^{-j})) \}\]
+
+ii) Applicare armijo per ricercare lungo una direzione ammissibile, fissando $\beta$, $\sigma \in (0,1)$ e calcolando $\gamma^k = 2^{-l(k)}$. Dove.
 \[l(k) = \min \{j \in N : f(x^k + 2^{-j}(x(\beta^k) - x^k)) \leq f(x^k) - \sigma 2^{-j} \nabla f(x^k)'(x^k - x(\beta^k)) \}\]
 
-ii) Applicare armijo per ricercare lungo il confine C, fissando $\gamma^k = 1$, ${\hat{\beta} > 0}$ e cercando $\beta^k =\hat{\beta}2^{-l(k)}$. Dove. 
-\[l(k) = \min \{j \in N : f(x(\hat{\beta}2^{-j})) \leq f(x^k) - \sigma \nabla f(x^k)'(x^k - x(\hat{\beta}2^{-j})) \}\]
 Esplicitate queste due strategie, sono noti i due seguenti risultati di convergenza.\\
 Diamo d'apprima l'enunciato di convergenza per la strategia i) del passo di armijo.
-\begin{theorem}
-Dato il problema definito nella sezione introduttiva e l'algoritmo risolutivo definito nella presente trattazione, allora se viene considerata come selezione del passo la versione i) di armijo allora l'algoritmo si fermerà ad una certa iterazione k, nel qual caso $x^k$ è una soluzione, oppure verrà generata una sequenza infinita $\{x^k\}$, la quale converge alla soluzione ottimale del problema
-\end{theorem}
-Diamo infine l'enunciato di convergenza per la strategia ii) del passo di armijo.
-\begin{theorem}
-Se $\{x^k\}$ è una sequenza generata da ii) allora\\
+\begin{theorem}[Ref: Proposizione 5 pag. 48 in \cite{gafni1982convergence}]
+Se $\{x^k\}$ è una sequenza generata da i) allora\\
 \begin{itemize}
     \item $\{x^k\}$ appartiene alla regione ammissibile del problema.
-    \item $\beta^k$ definita da ii).
+    \item $\beta^k$ definita da i).
     \item se $\nabla f(x^k) \neq 0$ allora $\langle \nabla f(x^k), x(\beta^k) - x^k \rangle < 0$.
     \item Se il problema della presente ammette una soluzione e la sequenza $\{x^k\}$ converge, allora convergerà alla soluzione del problema.
 \end{itemize}
+\end{theorem}
+Diamo infine l'enunciato di convergenza per la strategia ii) del passo di armijo.
+\begin{theorem}[Ref: Teorema 1 pag. 45 in \cite{gafni1982convergence}]
+Dato il problema definito nella sezione introduttiva e l'algoritmo risolutivo definito nella presente trattazione, allora se viene considerata come selezione del passo la versione ii) di armijo allora l'algoritmo si fermerà ad una certa iterazione k, nel qual caso $x^k$ è una soluzione, oppure verrà generata una sequenza infinita $\{x^k\}$, la quale converge alla soluzione ottimale del problema
 \end{theorem}
 \section{Esperimenti}
 Nella presente sezione, dopo aver implementato l'algoritmo definito precedentemente e le varianti definite dalle varie scelte del passo, anderemo a verificare i risultati teorici riportati nella sezione precedente. Proporremo all'algoritmo risolutivo varie configurazioni, particolari e non, e soprattutto vedremo se il metodo riesce a gestire dimensioni molto grandi del problema e quanto bene riesce a scalare. Infine daremo una comparazione con uno degli algoritmi implementati in matlab per la risoluzione di un problema di ottimizzazione vincolato.
@@ -184,12 +193,26 @@ Infine definiamo l'utilizzo del parametro \texttt{activ\_percentage}, una volta 
 Abbiamo quindi la casistica in cui \texttt{activ\_percentage} non è dato e dunque $q$ verrà selezionato tramite distribuzione normale riscalato per \texttt{scale}.
 Mentre per la casistica in cui \texttt{activ\_percentage} ha assegnato un valore tra 0 e 1, allora $Q$ sarà generata in modo da risultare definita positiva, ed il vettore $q$ sarà generato in modo che le coordinate del minimo della funzione quadratica appertengono al box con una probabilità pari ad \texttt{activ\_percentage}.
 \subsection{Setup e risultati degli esperimenti}
-bla bla bla
+Andiamo ora a definire il setup sperimentale riguardo al confronto tra le varie selezioni del passo.\\
+Abbiamo deciso di creare vari bunch di dati, ognuno contentente 100 problemi differenti, ogni bunch viene generato definendo la dimensione dei problemi e parametri dell'algoritmo di generazione dei problemi. Abbiamo creato 7 bunch in totale, dei quali 6 aventi dimensionalità 100 e i cui parametri di generazione del problema rappresentano le possibili combinazioni di \texttt{activ\_percentage=[-1, 0.2, 0.9] } e \texttt{intersection\_percentage= [0.2, 0.9]} . Abbiamo poi creato un settimo bunch con dimensionalità 300 e \texttt{activ\_percentage} = -1 e  \texttt{intersection\_percentage} = 1.\\
+Per ogni problema di ogni bunch, abbiamo calcolato $f^*$ tramite l'algoritmo \texttt{fmincon} di Matlab, il quale utilizza il metodo \texttt{active-set} con precisione di ottimalità di $10^{-15}$.\\
+Per ogni step size e per l'algoritmo fmincon, definendo la stopping criteria (per il nostro problema) e la condizione di ottimalità (per fmincon) a $10^{-6}$, abbiamo calcolato su ogni bunch la media delle sequenze di convergenza rispetto all'errore relativo di $f^*$, la media e la varianza del tempo di esecuzione e rispetto all'errore relativo finale di tutte le sequenze, è stato anche definito un limite massimo di iterazioni pari a 500. Commentiamo ora i risultati di convergenza degli esperimenti sui vari bunches sperimentali. \\
+% intersection_precentage=0.2
+Nella tabella \ref{tab:100_menouno_zerodue} e nella figura \ref{fig:100_menouno_zerodue} sono riportati i risultati degli esperimenti riguardo i parametri intersection\_percentage = 0.2 e activ\_percentage = -1, i tempi di esecuzione sono pressocchè simili per ogni algoritmo, notiamo una leggera differenza per il passo fisso e polyak che hanno un tempo medio di $10^{-2}$ minore degli altri.  Polyak, Arimjo 1 e fixed stepsize convergono entro 500 iterazioni ad un errore relativo di circa $10^{-14}$, mentre dimishing ed Armijo 2 convergono rispettivamente ad un errore relativo di $10^{-5}$ e $10^{-6}$ . Le curve di convergenza riportate nella figura indicano come, gli algoritmi che convergono prima sono quelli a passo fisso e armijo 1, seguiti poi da fmincon di matlab e polyak. Graficamente si può notare come la convergenza del passo fisso e armijo 1, nonostante in tempi minori, sia sublineare, mentre la convergenza di polyak e fmincon è quadratica.\\
+Nella tabella \ref{tab:100_zerodue_zerodue} e nella figura \ref{fig:100_zerodue_zerodue} sono riportati i risultati degli esperimenti riguardo i parametri intersection\_percentage = 0.2 e activ\_percentage = 0.2. Polyak, Armijo 2 e fixed sono di media leggermente più veloci nel completare le 500 iterazioni con tempo medio di $10^{-2}$. Per le considerazioni di convergenza vale quanto detto precedentemente, anche se in questo caso gli algoritmi migliori convergono ad un errore relativo di $10^{-14}$. È inoltre possibile notare come polyak, rispetto al caso precedentemente, converge richiedendo più iterazioni.\\
+Nella tabella \ref{tab:100_zeronove_zerodue}  e nella figura \ref{fig:100_zeronove_zerodue} sono riportati i risultati degli esperimenti riguardo i parametri intersection\_percentage = 0.2 e activ\_percentage = 0.9, anche in tal caso polyak e passo fisso sono di media leggermente più veloci. In tal caso a convergere in 500 iterazioni ad un errore relativo minore di $10^{-13}$ sono passo fisso, armijo 1 e Polayk, quest'ultimo però lo fa in un numero di iterazioni leggermente maggiore rispetto alle configurazioni precedenti. È quindi interessare notare come polyak richieda più iterazioni per convergere all'aumentare del parametro actv\_precentage, quindi all'aumentare delle coordinate appartenenti al box del punto ottimo della funzione. Le curve di convergenza riportate nella figura indicano come, gli algoritmi che convergono prima sono quelli a passo fisso e armijo 1, seguiti poi da fmincon e polyak. Graficamente si può notare come la convergenza del passo fisso e armijo 1, sia sublineare, mentre la convergenza di fmincon e Polyak è quadratica.\\
+% intersection_precentage=0.9
+Nella tabella \ref{tab:100_menouno_zeronove} e nella figura \ref{fig:100_menouno_zeronove} sono riportati i risultati degli esperimenti riguardo i parametri intersection\_percentage = 0.9 e activ\_percentage = -1, i tempi di esecuzione sono pressocchè simili per ogni algoritmo, notiamo una leggera differenza per il passo fisso e polyak che hanno un tempo medio di $10^{-2}$ minore degli altri. Tranne diminishing ed armijo ii, tutti gli algoritmi riescono a convergere entro 500 iterazioni ad un errore relativo minore di $10^{-10}$. Le curve di convergenza riportate nella figura indicano come, gli algoritmi che convergono prima sono quelli a passo fisso e armijo 1, seguiti poi da fmincon di matlab e polyak. Graficamente si può notare come la convergenza del passo fisso e armijo 1, nonostante in tempi minori, sia sublineare, mentre la convergenza di polyak e fmincon è quadratica.\\
+Nella tabella \ref{tab:100_zerodue_zeronove} e nella figura \ref{fig:100_zerodue_zeronove} sono riportati i risultati degli esperimenti riguardo i parametri intersection\_percentage = 0.9 e activ\_percentage = 0.2, anche in tal caso polyak e passo fisso sono di media leggermente più veloci nel completare le 500 iterazioni. Per le considerazioni di convergenza vale quanto detto precedentemente, è inoltre possibile notare come polyak, rispetto al caso precedentemente, converge richiedendo più iterazioni.\\
+Nella tabella \ref{tab:100_zeronove_zeronove}  e nella figura \ref{fig:100_zeronove_zeronove}  sono riportati i risultati degli esperimenti riguardo i parametri intersection\_percentage = 0.9 e activ\_percentage = 0.9, anche in tal caso polyak e passo fisso sono di media leggermente più veloci. In tal caso a convergere 500 iterazioni ad un errore relativo minore di $10^{-10}$ sono passo fisso, armijo 1 e fmincon, in tal caso polyak contrariamente a quanto accade nelle altre casistiche non riesce a convergere nelle iterazioni impostate. \'E quindi interessare notare come sia degradato il comportamento di polyak al'aumentare delle coordinate appartenenti al box del punto ottimo della funzione quadratica, nella casistica in cui la massima intersezione tra vincolo di zaino e box è pari al 90\%. Le curve di convergenza riportate nella figura indicano come, gli algoritmi che convergono prima sono quelli a passo fisso e armijo 1, seguiti poi da fmincon di matlab. Graficamente si può notare come la convergenza del passo fisso e armijo 1, sia sublineare, mentre la convergenza di fmincon è quadratica.\\
+Nella tabella \ref{tab:300} e nella figura \ref{fig:300} sono riportati i risultati degli esperimenti sui dati di dimensionalità pari a 300.\\
+I tempo d esecuzione migliore è stato raggiunto da polyak e fixed, di contro abbiamo fmincon avere il tempo di esecuzione in media peggiore con 2.59 secondi. Le curve di convergenza sono simili ad alcune presenti in altre sperimentazioni, abbiamo una convergenza sublineare per amijo 1 e passo fisso, mentre polyak e fmincon graficamente lasciano intuire una corvergenza quadratica, anche in tal caso diminishing e armijo 2 non riescono a convergere in 500 iterazioni.
+\input{tables}
 \section{Support Vector Machine}
 Una versione leggermente diversa del problema di ottimizzazione quadratica esposto nella presente trattazione, è alla base del funzionamento delle macchine a vettori di supporto (SVM), ovvero dei modelli di machine learning sfruttati per classificazione e regressione.\\
 In questa sezione tratteremo la soft-margin svm lineare per la classificazione, tali modelli di apprendimento possono essere ampliati per la gestione di dati non linearmente separabili, tramite i kernel tricks.
 Non tratteremo l'utilizzo di tali modelli per la regressione, sono comunque ben noti metodologie per effettuare regressione, i quali si basano sugli stessi principi matematici sfruttati per effettuare classificazione.\\
-I risultati esposti e le notazioni, presenti nella sottosezione di formalizzazione del problema, sono stati ripresi in parte dalle slides del corso di \textbf{Machine Learnign}.
+I risultati esposti e le notazioni, presenti nella sottosezione di formalizzazione del problema, sono stati ripresi in parte dalle slides del corso di \textbf{Machine Learning}.
 \subsection{Formalizzazione del problema}
 Dato un insieme di dati $T = \{(x_i, d_i)\}_{i=1}^N$ L'obiettivo delle macchine a vettori di supporto con hard-margin è quello di trovare l'iperpiano separatore, definito da $w$ e $b$, tale che:
 \[d_i(w'x_i + b) \geq 1 \quad \forall i = 1, ..., N\]
@@ -240,19 +263,22 @@ A tal punto è diretta la formulazione del duale, mettendo insieme le equazioni 
 \subsection{Esperimenti}
 Per fini didattici abbiamo implementato la soft-margin svm in matlab sfruttando il metodo risolutivo tramite gradiente proiettato per programmazione quadratica con vincoli di knapsack, abbiamo dunque confrontato tale metodo, utilizzando le diverse scelte del passo, con il metodo implementato dalla \texttt{fitcsvm} di matlab, disponibile tramite \texttt{statistics and machine learning toolbox}.
 Il dataset su cui abbiamo effettuato tali esperimenti è \texttt{Ionosphere} disponibile built-in in matlab. Tale dataset consiste in una matrice \texttt{X} di dimensioni 351(samples) x 34(features), contenente valori reali i quali rappresentano informazioni riguardanti la ionosfera. La variabile target è definita da un vettore \texttt{Y} contenente i valori 'g' e 'b', che indicano la qualità dei segnali radar. Per maggiorni informazioni si faccia riferimento a \cite{ionosphere_dataset}.\\
-Non si sono effettuate fasi di preprocessing dei dati di input, l'unica operazione sui dati effettuata è stata quella di trasformare il vettore \texttt{Y} sostituendo i valori 'g' con 1 e 'b' in -1.\\
-Prima di mettere a confronto i vari metodi, si è effettuata una fase di screening per la selezione (a grandi linee) dei parametri algoritmici, dalla quale si è selezionato il valore $C=10$.\\
+Non si sono effettuate fasi di preprocessing dei dati di input, l'unica operazione sui dati effettuata è stata quella di trasformare il vettore \texttt{Y} sostituendo i valori \quotes{g} con 1 e \quotes{b} in -1.\\
+Abbiamo suddiviso il dataset in una parte di training per l'allenamento dei modelli $80\%$, e la restante parte per il testing, prima di effettuare tale divisione il dataset è sottoposto ad operazione di shuffling.\\
+Si è dunque effettuata una fase di screening per la selezione (a grandi linee) dei parametri algoritmici, dalla quale si è selezionato il valore $C=10$.\\
 Nella tabella \ref{table:svmresults} si riportano, per ogni metodo, il tempo allenamento, il valore di accuracy nel dataset di training e testing, il valore di precision e recall per il dataset di testing.\\
 Notiamo come i valori di accuracy, precision e recall, sono abbastanza simili tra i vari metodi, mentre i valori di timing sono più elevati per le due varianti del metodo di Armijo, ciò è sicuramente dovuto alla ricerca di backtracking.\\
 \begin{table}[]
+    \setlength{\tabcolsep}{10pt} % Default value: 6pt
+    \renewcommand{\arraystretch}{1.2} % Default value: 1
     \centering
     \begin{tabular}{ |p{3cm}||p{1.5cm}|p{2cm}|p{2cm}|p{2cm}|p{1.5cm}|  }
     \hline
-    \multicolumn{6}{|c|}{Ionosphere dataset} \\
-    \hline
     metodo & timing (s) & accuracy tr \% & accuracy ts \% & precision ts \% & recall ts \%\\
     \hline
+    \hline
     fitcsvm (MATLAB) & 0.69  & 95 & 83 & 78 & 72\\
+    \hline
     \hline
     Fixed ($\alpha = 0.001$) & 0.69 & 90 & 86 & 86 & 72\\
     \hline

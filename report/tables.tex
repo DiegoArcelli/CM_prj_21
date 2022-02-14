@@ -1,0 +1,215 @@
+\captionsetup{justification=centering}
+
+
+% n = 100, actv_percentage = -1, intersection_percentage = 0.2
+
+\begin{table}[H]
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.2} % Default value: 1
+\centering
+\begin{tabular}{|ccccc|}
+\hline
+\multicolumn{1}{|c||}{metodo}   & \multicolumn{1}{c|}{mean timing (s)}    & \multicolumn{1}{c|}{std timing (s)} & \multicolumn{1}{c|}{mean of $\frac{\|f - f^*\|}{\|f^*\|}$}   & std of $\frac{\|f - f^*\|}{\|f^*\|}$ \\ \hline\hline
+\multicolumn{1}{|c||}{fmincon} & \multicolumn{1}{c|}{1.949532e-01} & \multicolumn{1}{c|}{4.087497e-02}  & \multicolumn{1}{c|}{5.557492e-12} & 3.107091e-22 \\ \hline\hline
+\multicolumn{1}{|c||}{fixed}       & \multicolumn{1}{c|}{1.084006e-02} & \multicolumn{1}{c|}{2.914607e-03}  & \multicolumn{1}{c|}{6.406164e-15} & 7.499476e-28  \\ \hline
+\multicolumn{1}{|c||}{diminishing} & \multicolumn{1}{c|}{1.141034e-01} & \multicolumn{1}{c|}{1.177671e-02}  & \multicolumn{1}{c|}{8.042903e-05} & 1.255566e-08 \\ \hline
+\multicolumn{1}{|c||}{polyak} & \multicolumn{1}{c|}{1.049083e-02} & \multicolumn{1}{c|}{4.006678e-03}  & \multicolumn{1}{c|}{6.863705e-15} & 7.373598e-28 \\ \hline
+\multicolumn{1}{|c||}{armijo$_i$} & \multicolumn{1}{c|}{1.309432e-01} & \multicolumn{1}{c|}{6.411532e-02}  & \multicolumn{1}{c|}{6.028616e-15} & 7.500940e-28 \\ \hline
+\multicolumn{1}{|c||}{armijo$_{ii}$} & \multicolumn{1}{c|}{2.375932e-01} & \multicolumn{1}{c|}{4.817821e-02}  & \multicolumn{1}{c|}{9.708934e-06} & 6.328133e-11 \\ \hline
+\end{tabular}
+\caption{Results for n = 100, intersection\_percentage = 0.2, actv\_percentage = -1}
+\label{tab:100_menouno_zerodue}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=20cm, center]{./plots/plot_100_menouno_zerodue.png}
+    \caption{Convergence plot for n = 100, intersection\_percentage = 0.2, actv\_percentage = -1}
+    \label{fig:100_menouno_zerodue}
+\end{figure} 
+
+
+
+
+% n = 100, actv_percentage = 0.2, intersection_percentage = 0.2
+
+\begin{table}[H]
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.2} % Default value: 1
+\centering
+\begin{tabular}{|ccccc|}
+\hline
+\multicolumn{1}{|c||}{metodo}   & \multicolumn{1}{c|}{mean timing (s)}    & \multicolumn{1}{c|}{std timing (s)} & \multicolumn{1}{c|}{mean of $\frac{\|f - f^*\|}{\|f^*\|}$}   & std of $\frac{\|f - f^*\|}{\|f^*\|}$ \\ \hline\hline
+\multicolumn{1}{|c||}{fmincon} & \multicolumn{1}{c|}{2.007301e-01} & \multicolumn{1}{c|}{4.491358e-02}  & \multicolumn{1}{c|}{1.541725e-10} & 5.270178e-19 \\ \hline\hline
+\multicolumn{1}{|c||}{fixed}       & \multicolumn{1}{c|}{1.222169e-02} & \multicolumn{1}{c|}{3.575494e-03}  & \multicolumn{1}{c|}{3.937487e-14} & 3.138226e-27  \\ \hline
+\multicolumn{1}{|c||}{diminishing} & \multicolumn{1}{c|}{1.113613e-01} & \multicolumn{1}{c|}{1.446869e-02}  & \multicolumn{1}{c|}{1.332589e-03} & 4.294719e-06 \\ \hline
+\multicolumn{1}{|c||}{polyak} & \multicolumn{1}{c|}{2.188802e-02} & \multicolumn{1}{c|}{8.299930e-03}  & \multicolumn{1}{c|}{3.218906e-14} & 5.023156e-27 \\ \hline
+\multicolumn{1}{|c||}{armijo$_i$} & \multicolumn{1}{c|}{9.888070e-02} & \multicolumn{1}{c|}{3.206025e-02}  & \multicolumn{1}{c|}{3.394667e-14} & 6.875397e-27 \\ \hline
+\multicolumn{1}{|c||}{armijo$_{ii}$} & \multicolumn{1}{c|}{2.335504e-01} & \multicolumn{1}{c|}{3.487865e-02}  & \multicolumn{1}{c|}{2.050850e-04} & 1.712115e-07 \\ \hline
+\end{tabular}
+\caption{Results for n = 100, intersection\_percentage = 0.2, actv\_percentage = 0.2}
+\label{tab:100_zerodue_zerodue}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=20cm, center]{./plots/plot_100_zerodue_zerodue.png}
+    \caption{Convergence plot for n = 100, intersection\_percentage = 0.2, actv\_percentage = 0.2}
+    \label{fig:100_zerodue_zerodue}
+\end{figure} 
+
+
+
+% n = 100, actv_percentage = 0.9, intersection_percentage = 0.2
+
+\begin{table}[H]
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.2} % Default value: 1
+\centering
+\begin{tabular}{|ccccc|} 
+\hline 
+\multicolumn{1}{|c||}{metodo}   & \multicolumn{1}{c|}{mean timing (s)}    & \multicolumn{1}{c|}{std timing (s)} & \multicolumn{1}{c|}{mean of $\frac{\|f - f^*\|}{\|f^*\|}$}   & std of $\frac{\|f - f^*\|}{\|f^*\|}$ \\ \hline\hline 
+\multicolumn{1}{|c||}{fmincon}       & \multicolumn{1}{c|}{2.280607e-01} & \multicolumn{1}{c|}{5.461533e-02}  & \multicolumn{1}{c|}{4.575104e-08} & 2.020549e-13  \\ \hline \hline
+\multicolumn{1}{|c||}{fixed}       & \multicolumn{1}{c|}{1.385670e-02} & \multicolumn{1}{c|}{4.482161e-03}  & \multicolumn{1}{c|}{7.157249e-13} & 3.599319e-23  \\ \hline 
+\multicolumn{1}{|c||}{diminishing}       & \multicolumn{1}{c|}{1.198556e-01} & \multicolumn{1}{c|}{1.789878e-02}  & \multicolumn{1}{c|}{6.681678e-02} & 3.482551e-01  \\ \hline 
+\multicolumn{1}{|c||}{polyak}       & \multicolumn{1}{c|}{2.545656e-02} & \multicolumn{1}{c|}{1.071652e-02}  & \multicolumn{1}{c|}{4.227248e-13} & 1.225048e-23  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{i}$}       & \multicolumn{1}{c|}{1.150781e-01} & \multicolumn{1}{c|}{4.508705e-02}  & \multicolumn{1}{c|}{3.626585e-13} & 9.005459e-24  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{ii}$}       & \multicolumn{1}{c|}{2.592929e-01} & \multicolumn{1}{c|}{5.724945e-02}  & \multicolumn{1}{c|}{7.205241e-03} & 4.404590e-03  \\ \hline 
+\end{tabular} 
+
+\caption{Results for n = 100, intersection\_percentage = 0.2, actv\_percentage = 0.9}
+\label{tab:100_zeronove_zerodue}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=20cm, center]{./plots/plot_100_zeronove_zerodue.png}
+    \caption{Convergence plot for n = 100, intersection\_percentage = 0.2, actv\_percentage = 0.9}
+    \label{fig:100_zeronove_zerodue}
+\end{figure} 
+
+
+
+% n = 100, actv_percentage = -1, intersection_percentage = 0.9
+
+\begin{table}[H]
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.2} % Default value: 1
+\centering
+\begin{tabular}{|ccccc|} 
+\hline 
+\multicolumn{1}{|c||}{metodo}   & \multicolumn{1}{c|}{mean timing (s)}    & \multicolumn{1}{c|}{std timing (s)} & \multicolumn{1}{c|}{mean of $\frac{\|f - f^*\|}{\|f^*\|}$}   & std of $\frac{\|f - f^*\|}{\|f^*\|}$ \\ \hline\hline 
+\multicolumn{1}{|c||}{fmincon}       & \multicolumn{1}{c|}{2.073557e-01,} & \multicolumn{1}{c|}{4.977241e-02}  & \multicolumn{1}{c|}{2.046668e-11} & 2.319203e-21  \\ \hline \hline
+\multicolumn{1}{|c||}{fixed}       & \multicolumn{1}{c|}{1.623224e-02} & \multicolumn{1}{c|}{6.400464e-03}  & \multicolumn{1}{c|}{1.221435e-14} & 6.490718e-28  \\ \hline 
+\multicolumn{1}{|c||}{diminishing}       & \multicolumn{1}{c|}{1.269200e-01} & \multicolumn{1}{c|}{2.183725e-02}  & \multicolumn{1}{c|}{4.351213e-04} & 1.845316e-07  \\ \hline 
+\multicolumn{1}{|c||}{polyak}       & \multicolumn{1}{c|}{2.026503e-02,} & \multicolumn{1}{c|}{9.366150e-03}  & \multicolumn{1}{c|}{1.276344e-14} & 7.182056e-28  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{i}$}       & \multicolumn{1}{c|}{1.245273e-01,} & \multicolumn{1}{c|}{4.894641e-02}  & \multicolumn{1}{c|}{1.089082e-12} & 1.167740e-22  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{ii}$}       & \multicolumn{1}{c|}{2.597869e-01,} & \multicolumn{1}{c|}{5.744174e-02}  & \multicolumn{1}{c|}{3.441938e-05} & 6.026573e-10  \\ \hline 
+\end{tabular} 
+\caption{Results for n = 100, intersection\_percentage = 0.9, actv\_percentage = -1}
+\label{tab:100_menouno_zeronove}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=20cm, center]{./plots/plot_100_menouno_zeronove.png}
+    \caption{Convergence plot for n = 100, intersection\_percentage = 0.9, actv\_percentage = -1}
+    \label{fig:100_menouno_zeronove}
+\end{figure} 
+
+
+% n = 100, actv_percentage = 0.2, intersection_percentage = 0.9
+
+\begin{table}[H]
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.2} % Default value: 1
+\centering
+\begin{tabular}{|ccccc|} 
+\hline 
+\multicolumn{1}{|c||}{metodo}   & \multicolumn{1}{c|}{mean timing (s)}    & \multicolumn{1}{c|}{std timing (s)} & \multicolumn{1}{c|}{mean of $\frac{\|f - f^*\|}{\|f^*\|}$}   & std of $\frac{\|f - f^*\|}{\|f^*\|}$ \\ \hline\hline 
+\multicolumn{1}{|c||}{fmincon}       & \multicolumn{1}{c|}{2.177809e-01} & \multicolumn{1}{c|}{3.896319e-02}  & \multicolumn{1}{c|}{9.043926e-10} & 2.349415e-17  \\ \hline \hline
+\multicolumn{1}{|c||}{fixed}       & \multicolumn{1}{c|}{1.498239e-02} & \multicolumn{1}{c|}{6.314315e-03}  & \multicolumn{1}{c|}{2.962425e-13} & 1.094444e-24  \\ \hline 
+\multicolumn{1}{|c||}{diminishing}       & \multicolumn{1}{c|}{1.224596e-01} & \multicolumn{1}{c|}{2.111157e-02}  & \multicolumn{1}{c|}{2.188161e-02} & 5.449598e-03  \\ \hline 
+\multicolumn{1}{|c||}{polyak}       & \multicolumn{1}{c|}{2.878615e-02} & \multicolumn{1}{c|}{1.253583e-02}  & \multicolumn{1}{c|}{7.545432e-14} & 6.020333e-26  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{i}$}       & \multicolumn{1}{c|}{1.166680e-01} & \multicolumn{1}{c|}{4.108040e-02}  & \multicolumn{1}{c|}{5.633356e-14} & 1.934205e-26  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{ii}$}       & \multicolumn{1}{c|}{2.543104e-01} & \multicolumn{1}{c|}{5.127593e-02}  & \multicolumn{1}{c|}{1.519357e-03} & 2.516096e-05  \\ \hline 
+\end{tabular} 
+
+
+\caption{Results for n = 100, intersection\_percentage = 0.9, actv\_percentage = 0.2}
+\label{tab:100_zerodue_zeronove}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=20cm, center]{./plots/plot_100_zerodue_zeronove.png}
+    \caption{Convergence plot for n = 100, intersection\_percentage = 0.9, actv\_percentage = 0.2}
+    \label{fig:100_zerodue_zeronove}
+\end{figure} 
+
+
+
+% n = 100, actv_percentage = 0.9, intersection_percentage = 0.9
+
+\begin{table}[H]
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.2} % Default value: 1
+\centering
+\begin{tabular}{|ccccc|} 
+\hline 
+\multicolumn{1}{|c||}{metodo}   & \multicolumn{1}{c|}{mean timing (s)}    & \multicolumn{1}{c|}{std timing (s)} & \multicolumn{1}{c|}{mean of $\frac{\|f - f^*\|}{\|f^*\|}$}   & std of $\frac{\|f - f^*\|}{\|f^*\|}$ \\ \hline\hline 
+\multicolumn{1}{|c||}{fmincon}       & \multicolumn{1}{c|}{2.702551e-01} & \multicolumn{1}{c|}{6.115383e-02}  & \multicolumn{1}{c|}{5.822033e-11} & 2.162201e-20  \\ \hline \hline
+\multicolumn{1}{|c||}{fixed}       & \multicolumn{1}{c|}{2.454957e-02} & \multicolumn{1}{c|}{9.668051e-03}  & \multicolumn{1}{c|}{1.362308e-13} & 3.186431e-25  \\ \hline 
+\multicolumn{1}{|c||}{diminishing}       & \multicolumn{1}{c|}{1.155775e-01} & \multicolumn{1}{c|}{2.330400e-02}  & \multicolumn{1}{c|}{1.134532e-02} & 2.259791e-03  \\ \hline 
+\multicolumn{1}{|c||}{polyak}       & \multicolumn{1}{c|}{7.883645e-02} & \multicolumn{1}{c|}{4.082236e-02}  & \multicolumn{1}{c|}{2.285445e-02} & 2.142805e-03  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{i}$}       & \multicolumn{1}{c|}{2.343289e-01} & \multicolumn{1}{c|}{1.116169e-01}  & \multicolumn{1}{c|}{4.404544e-14} & 3.556356e-26  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{ii}$}       & \multicolumn{1}{c|}{2.507455e-01} & \multicolumn{1}{c|}{4.162506e-02}  & \multicolumn{1}{c|}{7.962401e-04} & 1.879149e-05  \\ \hline 
+\end{tabular} 
+
+\caption{Results for n = 100, intersection\_percentage = 0.9, actv\_percentage = 0.9}
+\label{tab:100_zeronove_zeronove}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=20cm, center]{./plots/plot_100_zeronove_zeronove.png}
+    \caption{Convergence plot for n = 100, intersection\_percentage = 0.9, actv\_percentage = 0.9}
+    \label{fig:100_zeronove_zeronove}
+\end{figure} 
+
+
+
+% n = 300
+
+\begin{table}[H]
+\setlength{\tabcolsep}{10pt} % Default value: 6pt
+\renewcommand{\arraystretch}{1.2} % Default value: 1
+\centering
+\begin{tabular}{|ccccc|} 
+\hline 
+\multicolumn{1}{|c||}{metodo}   & \multicolumn{1}{c|}{mean timing (s)}    & \multicolumn{1}{c|}{std timing (s)} & \multicolumn{1}{c|}{mean of $\frac{\|f - f^*\|}{\|f^*\|}$}   & std of $\frac{\|f - f^*\|}{\|f^*\|}$ \\ \hline\hline 
+\multicolumn{1}{|c||}{fmincon}       & \multicolumn{1}{c|}{2.590368e+00} & \multicolumn{1}{c|}{5.277532e-01}  & \multicolumn{1}{c|}{5.600965e-12} & 1.633105e-22  \\ \hline \hline
+\multicolumn{1}{|c||}{fixed}       & \multicolumn{1}{c|}{3.930736e-02} & \multicolumn{1}{c|}{1.231947e-02}  & \multicolumn{1}{c|}{4.204993e-15} & 7.185436e-29  \\ \hline 
+\multicolumn{1}{|c||}{diminishing}       & \multicolumn{1}{c|}{2.972718e-01} & \multicolumn{1}{c|}{6.914928e-02}  & \multicolumn{1}{c|}{4.782880e-04} & 1.325816e-07  \\ \hline 
+\multicolumn{1}{|c||}{polyak}       & \multicolumn{1}{c|}{5.253568e-02} & \multicolumn{1}{c|}{1.985033e-02}  & \multicolumn{1}{c|}{4.172296e-15} & 7.501491e-29  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{i}$}       & \multicolumn{1}{c|}{4.587901e-01} & \multicolumn{1}{c|}{1.650006e-01}  & \multicolumn{1}{c|}{3.066231e-15} & 9.026005e-29  \\ \hline 
+\multicolumn{1}{|c||}{armijo$_{ii}$}       & \multicolumn{1}{c|}{8.042102e-01} & \multicolumn{1}{c|}{9.428493e-02}  & \multicolumn{1}{c|}{3.454432e-05} & 3.264398e-10  \\ \hline 
+\end{tabular}
+
+\caption{Results for n = 300}
+\label{tab:300}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+    \includegraphics[width=20cm, center]{./plots/plot_300.png}
+    \caption{Convergence plot for n = 300}
+    \label{fig:300}
+\end{figure} 
