@@ -7,8 +7,8 @@ function [x_star, f_star, x_s, f_s, g_s] = KQP(f, l, u, a, b, x_start, eps, eps_
     % region to obtain x_{i+1) = proj(y_i)
     %
     % input arguments:
-    % - Q (a nxn positive semi-definite matrix) and q (a n dimensional vector) to
-    % represent the quadratic function to minimize
+    % - f, the function to be minimized, that return the value and the
+    % gradient in x
     % - l, u, a (n dimensional vectors) and b (scalar) to define the feasible region
     % - x_start: the starting point of the algorithm
     % - eps: the precision required from the algorithm
