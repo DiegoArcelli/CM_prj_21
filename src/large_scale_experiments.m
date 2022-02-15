@@ -5,28 +5,6 @@ inter_per  = 1;
 actv_per = -1;
 max_iters = 500;
 
-file_name = "bunch.mat";
-
-bunch_cel = cell(1, n_samples);
-
-wait_bar = waitbar(0,'Creating samples');
-
-for i = 1:n_samples
-    [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, inter_per, actv_per);
-       
-    problem.Q = Q;
-    problem.q = q;
-    problem.l = l;
-    problem.u = u;
-    problem.a = a;
-    problem.b = b;
-    problem.x_start = x_start;
-
-    bunch_cel{i} = problem;
-    
-    wait_bar = waitbar(i/n_samples, wait_bar,'Creating samples');
-end
-
 % fixed step size
 timing_kqp_fs = zeros(1, n_samples);
 
@@ -38,19 +16,13 @@ i = 0;
 wait_bar = waitbar(0,'Processing your data');
 
 % bunch_cel is the name of the bunch of problems
-for problem_instance = bunch_cel
+for problem_instance = 1:n_samples
     i = i+1;
     
     p = problem_instance{1};
     
-    Q = p.Q;
-    q = p.q;
-    l = p.l;
-    u = p.u;
-    a = p.a;
-    b = p.b;
-    x_start = p.x_start;
-    
+    [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, inter_per, actv_per);
+        
     eigs_Q = eig(Q);
     L = max(eigs_Q);
     tau = min(eigs_Q);
