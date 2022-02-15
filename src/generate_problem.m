@@ -56,7 +56,7 @@ function [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, intersection_p
         q = randn(n, 1)*scale;
     end
 
-    x_start = projection(l, u, a, b, randn(n, 1)*scale, 10e-10, eq_knapsack);
+    x_start = projection(l, u, a, b, randn(n, 1)*scale, 10e-10, false);
 end
 
 
