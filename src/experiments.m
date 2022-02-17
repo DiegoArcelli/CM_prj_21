@@ -242,22 +242,22 @@ fprintf("relative error on the f reached fmincon step size, mean %d, var %d\n\n"
 % hold off
 
 figure('DefaultAxesFontSize',18);
-semilogy(f_s_kqp_mean_fs, 'LineWidth',1);
+semilogy(remove_padding_from_sequence(f_s_kqp_mean_fs), 'LineWidth',1);
 hold on
-semilogy(f_s_kqp_mean_diminishing, 'LineWidth',1);
-semilogy(f_s_kqp_mean_polyak, 'LineWidth',1);
-semilogy(f_s_kqp_mean_armijo_i, 'LineWidth',1);
-semilogy(f_s_kqp_mean_armijo_ii, 'LineWidth',1);
-semilogy(f_s_fmincon_mean, 'LineWidth',1);
+semilogy(remove_padding_from_sequence(f_s_kqp_mean_diminishing), 'LineWidth',1);
+semilogy(remove_padding_from_sequence(f_s_kqp_mean_polyak), 'LineWidth',1);
+semilogy(remove_padding_from_sequence(f_s_kqp_mean_armijo_i), 'LineWidth',1);
+semilogy(remove_padding_from_sequence(f_s_kqp_mean_armijo_ii), 'LineWidth',1);
+semilogy(remove_padding_from_sequence(f_s_fmincon_mean), 'LineWidth',1);
 lgd = legend('fixed','diminishing', 'polyak', 'armijo 1', 'armijo 2', 'fmincon');
 lgd.FontSize = 15;
 
 title('Relative norm of fs to f*', 'FontSize', 18);
+xlim([0, 501]);
 hold off
 
 
 function [seq] = padding_sequence(sequence, max_iter)
-    % docstring
     size_sequence = size(sequence);
     filled = size_sequence(2);
     
@@ -266,4 +266,10 @@ function [seq] = padding_sequence(sequence, max_iter)
     padding = repmat(sequence(:, end), 1, padding_size);
     
     seq = [sequence, padding];
+end
+
+function [seq] = remove_padding_from_sequence(sequence)
+    min_seq = min(sequence);
+    seq = sequence(sequence > min_seq + 1e-15);
+    seq = [seq, min_seq];
 end
