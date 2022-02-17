@@ -1,0 +1,218 @@
+plots -> bunch_n_act_intersection
+
+actv_precentage = -1
+intersection_precentage = 0.2
+
+convergence time fixed step size, mean 1.084006e-02, std 2.914607e-03
+relative error on the x reached fixed step size, mean 6.206497e-08, var 4.336930e-16
+relative error on the f reached fixed step size, mean 6.406164e-15, var 7.499476e-28
+
+convergence time diminishing step size, mean 1.141034e-01, std 1.177671e-02
+relative error on the x reached diminishing step size, mean 8.131379e-03, var 3.259724e-05
+relative error on the f reached diminishing step size, mean 8.042903e-05, var 1.255566e-08
+
+convergence time polyak step size, mean 1.049083e-02, std 4.006678e-03
+relative error on the x reached polyak step size, mean 6.137659e-08, var 2.148678e-15
+relative error on the f reached polyak step size, mean 6.863705e-15, var 7.373598e-28
+
+convergence time armijo_i step size, mean 1.309432e-01, std 6.411532e-02
+relative error on the x reached armijo_i step size, mean 1.903843e-08, var 1.348491e-16
+relative error on the f reached armijo_i step size, mean 6.028616e-15, var 7.500940e-28
+
+convergence time armijo_ii step size, mean 2.375932e-01, std 4.817821e-02
+relative error on the x reached armijo_ii step size, mean 4.022675e-04, var 5.376540e-08
+relative error on the f reached armijo_ii step size, mean 9.708934e-06, var 6.328133e-11
+
+convergence time fmincon step size, mean 1.949532e-01, std 4.087497e-02
+relative error on the x reached fmincon step size, mean 6.506743e-08, var 1.146768e-14
+relative error on the f reached fmincon step size, mean 5.557492e-12, var 3.107091e-22
+
+-------------------------
+
+actv_precentage = 0.2
+intersection_precentage = 0.2
+
+convergence time fixed step size, mean 1.222169e-02, std 3.575494e-03
+relative error on the x reached fixed step size, mean 7.390194e-08, var 5.241308e-16
+relative error on the f reached fixed step size, mean 3.937487e-14, var 3.138226e-27
+
+convergence time diminishing step size, mean 1.113613e-01, std 1.446869e-02
+relative error on the x reached diminishing step size, mean 1.078219e-02, var 4.385024e-05
+relative error on the f reached diminishing step size, mean 1.332589e-03, var 4.294719e-06
+
+convergence time polyak step size, mean 2.188802e-02, std 8.299930e-03
+relative error on the x reached polyak step size, mean 2.909067e-08, var 6.948397e-16
+relative error on the f reached polyak step size, mean 3.218906e-14, var 5.023156e-27
+
+convergence time armijo_i step size, mean 9.888070e-02, std 3.206025e-02
+relative error on the x reached armijo_i step size, mean 1.848860e-08, var 1.697615e-16
+relative error on the f reached armijo_i step size, mean 3.394667e-14, var 6.875397e-27
+
+convergence time armijo_ii step size, mean 2.335504e-01, std 3.487865e-02
+relative error on the x reached armijo_ii step size, mean 4.998024e-04, var 7.887812e-08
+relative error on the f reached armijo_ii step size, mean 2.050850e-04, var 1.712115e-07
+
+convergence time fmincon step size, mean 2.007301e-01, std 4.491358e-02
+relative error on the x reached fmincon step size, mean 6.319443e-08, var 4.650716e-15
+relative error on the f reached fmincon step size, mean 1.541725e-10, var 5.270178e-19
+
+-------------------------
+
+actv_precentage = 0.9
+intersection_precentage = 0.2
+
+convergence time fixed step size, mean 1.385670e-02, std 4.482161e-03
+relative error on the x reached fixed step size, mean 8.004613e-08, var 8.175361e-16
+relative error on the f reached fixed step size, mean 7.157249e-13, var 3.599319e-23
+
+convergence time diminishing step size, mean 1.198556e-01, std 1.789878e-02
+relative error on the x reached diminishing step size, mean 1.218644e-02, var 5.015908e-05
+relative error on the f reached diminishing step size, mean 6.681678e-02, var 3.482551e-01
+
+convergence time polyak step size, mean 2.545656e-02, std 1.071652e-02
+relative error on the x reached polyak step size, mean 3.166372e-08, var 1.026166e-15
+relative error on the f reached polyak step size, mean 4.227248e-13, var 1.225048e-23
+
+convergence time armijo_i step size, mean 1.150781e-01, std 4.508705e-02
+relative error on the x reached armijo_i step size, mean 2.138688e-08, var 1.761961e-16
+relative error on the f reached armijo_i step size, mean 3.626585e-13, var 9.005459e-24
+
+convergence time armijo_ii step size, mean 2.592929e-01, std 5.724945e-02
+relative error on the x reached armijo_ii step size, mean 4.949776e-04, var 5.802959e-08
+relative error on the f reached armijo_ii step size, mean 7.205241e-03, var 4.404590e-03
+
+convergence time fmincon step size, mean 2.280607e-01, std 5.461533e-02
+relative error on the x reached fmincon step size, mean 6.253391e-08, var 4.459182e-15
+relative error on the f reached fmincon step size, mean 4.575104e-08, var 2.020549e-13
+
+--------------------
+
+actv_precentage = -1
+intersection_precentage = 0.9
+
+convergence time fixed step size, mean 1.623224e-02, std 6.400464e-03
+relative error on the x reached fixed step size, mean 1.091411e-07, var 1.990525e-15
+relative error on the f reached fixed step size, mean 1.221435e-14, var 6.490718e-28
+
+convergence time diminishing step size, mean 1.269200e-01, std 2.183725e-02
+relative error on the x reached diminishing step size, mean 1.991434e-02, var 1.615338e-04
+relative error on the f reached diminishing step size, mean 4.351213e-04, var 1.845316e-07
+
+convergence time polyak step size, mean 2.026503e-02, std 9.366150e-03
+relative error on the x reached polyak step size, mean 9.768094e-08, var 3.426222e-15
+relative error on the f reached polyak step size, mean 1.276344e-14, var 7.182056e-28
+
+convergence time armijo_i step size, mean 1.245273e-01, std 4.894641e-02
+relative error on the x reached armijo_i step size, mean 2.681074e-08, var 3.133651e-16
+relative error on the f reached armijo_i step size, mean 1.089082e-12, var 1.167740e-22
+
+convergence time armijo_ii step size, mean 2.597869e-01, std 5.744174e-02
+relative error on the x reached armijo_ii step size, mean 6.572202e-04, var 1.407722e-07
+relative error on the f reached armijo_ii step size, mean 3.441938e-05, var 6.026573e-10
+
+convergence time fmincon step size, mean 2.073557e-01, std 4.977241e-02
+relative error on the x reached fmincon step size, mean 1.348707e-07, var 1.827901e-14
+relative error on the f reached fmincon step size, mean 2.046668e-11, var 2.319203e-21
+
+-------------------------
+
+actv_precentage = 0.2
+intersection_precentage = 0.9
+
+convergence time fixed step size, mean 1.498239e-02, std 6.314315e-03
+relative error on the x reached fixed step size, mean 8.518677e-08, var 8.729271e-16
+relative error on the f reached fixed step size, mean 2.962425e-13, var 1.094444e-24
+
+convergence time diminishing step size, mean 1.224596e-01, std 2.111157e-02
+relative error on the x reached diminishing step size, mean 1.517281e-02, var 1.055871e-04
+relative error on the f reached diminishing step size, mean 2.188161e-02, var 5.449598e-03
+
+convergence time polyak step size, mean 2.878615e-02, std 1.253583e-02
+relative error on the x reached polyak step size, mean 4.065908e-08, var 1.387096e-15
+relative error on the f reached polyak step size, mean 7.545432e-14, var 6.020333e-26
+
+convergence time armijo_i step size, mean 1.166680e-01, std 4.108040e-02
+relative error on the x reached armijo_i step size, mean 1.999453e-08, var 1.410829e-16
+relative error on the f reached armijo_i step size, mean 5.633356e-14, var 1.934205e-26
+
+convergence time armijo_ii step size, mean 2.543104e-01, std 5.127593e-02
+relative error on the x reached armijo_ii step size, mean 5.338000e-04, var 6.463392e-08
+relative error on the f reached armijo_ii step size, mean 1.519357e-03, var 2.516096e-05
+
+convergence time fmincon step size, mean 2.177809e-01, std 3.896319e-02
+relative error on the x reached fmincon step size, mean 6.031759e-08, var 4.236466e-15
+relative error on the f reached fmincon step size, mean 9.043926e-10, var 2.349415e-17
+
+----------------
+
+actv_precentage = 0.9
+intersection_precentage = 0.9
+
+convergence time fixed step size, mean 2.454957e-02, std 9.668051e-03
+relative error on the x reached fixed step size, mean 2.059744e-07, var 8.564299e-15
+relative error on the f reached fixed step size, mean 1.362308e-13, var 3.186431e-25
+
+convergence time diminishing step size, mean 1.155775e-01, std 2.330400e-02
+relative error on the x reached diminishing step size, mean 4.702937e-02, var 7.098801e-04
+relative error on the f reached diminishing step size, mean 1.134532e-02, var 2.259791e-03
+
+convergence time polyak step size, mean 7.883645e-02, std 4.082236e-02
+relative error on the x reached polyak step size, mean 2.932586e-02, var 1.798406e-03
+relative error on the f reached polyak step size, mean 2.285445e-02, var 2.142805e-03
+
+convergence time armijo_i step size, mean 2.343289e-01, std 1.116169e-01
+relative error on the x reached armijo_i step size, mean 7.467310e-08, var 2.043637e-15
+relative error on the f reached armijo_i step size, mean 4.404544e-14, var 3.556356e-26
+
+convergence time armijo_ii step size, mean 2.507455e-01, std 4.162506e-02
+relative error on the x reached armijo_ii step size, mean 1.048870e-03, var 2.164275e-07
+relative error on the f reached armijo_ii step size, mean 7.962401e-04, var 1.879149e-05
+
+convergence time fmincon step size, mean 2.702551e-01, std 6.115383e-02
+relative error on the x reached fmincon step size, mean 8.986947e-08, var 6.050708e-15
+relative error on the f reached fmincon step size, mean 5.822033e-11, var 2.162201e-20
+
+---------------
+
+n = 300
+
+convergence time fixed step size, mean 3.930736e-02, std 1.231947e-02
+relative error on the x reached fixed step size, mean 6.875515e-08, var 4.084649e-16
+relative error on the f reached fixed step size, mean 4.204993e-15, var 7.185436e-29
+
+convergence time diminishing step size, mean 2.972718e-01, std 6.914928e-02
+relative error on the x reached diminishing step size, mean 2.208491e-02, var 9.626186e-05
+relative error on the f reached diminishing step size, mean 4.782880e-04, var 1.325816e-07
+
+convergence time polyak step size, mean 5.253568e-02, std 1.985033e-02
+relative error on the x reached polyak step size, mean 6.827824e-08, var 6.304752e-16
+relative error on the f reached polyak step size, mean 4.172296e-15, var 7.501491e-29
+
+convergence time armijo_i step size, mean 4.587901e-01, std 1.650006e-01
+relative error on the x reached armijo_i step size, mean 1.460296e-08, var 5.943867e-17
+relative error on the f reached armijo_i step size, mean 3.066231e-15, var 9.026005e-29
+
+convergence time armijo_ii step size, mean 8.042102e-01, std 9.428493e-02
+relative error on the x reached armijo_ii step size, mean 6.715854e-04, var 3.581316e-08
+relative error on the f reached armijo_ii step size, mean 3.454432e-05, var 3.264398e-10
+
+convergence time fmincon step size, mean 2.590368e+00, std 5.277532e-01
+relative error on the x reached fmincon step size, mean 1.553504e-07, var 1.318582e-14
+relative error on the f reached fmincon step size, mean 5.600965e-12, var 1.633105e-22
+
+n = 1000
+convergence time fixed step size, mean 2.105392e-01, std 5.886682e-02
+convergence time polyak step size, mean 2.729058e-01, std 7.011642e-02
+relative error fixed step size, mean 7.501150e-16, std 0
+relative error polyak step size, mean 4.579847e-16, std 0
+Elapsed time is 127.569236 seconds for fmincom active-set
+
+n = 5000
+convergence time fixed step size, mean 3.963731e+00, std 7.232182e-01
+convergence time polyak step size, mean 5.419650e+00, std 1.544473e+00
+fmincon active-set not terminated in 2h
+
+n = 10000
+convergence time fixed step size, mean 1.334200e+01, std 2.763274e+00
+convergence time polyak step size, mean 1.720615e+01, std 5.532951e+00
+fmincon active-set not terminated in 2h
