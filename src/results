@@ -204,6 +204,7 @@ n = 1000
 convergence time fixed step size, mean 2.105392e-01, std 5.886682e-02
 convergence time polyak step size, mean 2.729058e-01, std 7.011642e-02
 relative error fixed step size, mean 7.501150e-16, std 0
+relative error polyak step size, mean 4.579847e-16, std 0
 Elapsed time is 127.569236 seconds for fmincom active-set
 
 n = 5000
