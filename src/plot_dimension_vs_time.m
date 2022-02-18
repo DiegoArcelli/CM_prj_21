@@ -9,10 +9,12 @@ polyak_timing_100 = [1.049083e-02, 2.188802e-02, 2.545656e-02, 2.026503e-02, 2.8
 polyak_timing = [mean(polyak_timing_100), 5.253568e-02, 2.729058e-01, 5.419650e+00, 1.720615e+01];
 
 figure('DefaultAxesFontSize',18);
-plot(dimensionalities, fixed_timing, 'LineWidth',1);
+semilogx(dimensionalities, fixed_timing, 'LineWidth',1);
 hold on
-plot(dimensionalities, polyak_timing);
+semilogx(dimensionalities, polyak_timing);
 xlabel('Dimensionality of the problem', 'LineWidth',1);
 ylabel('Time to converge (s)');
 lgd = legend('fixed', 'polyak');
 lgd.FontSize = 15;
+
+fplot(@(x) (0.00016)*x.*log(x), [100, 10000]);
