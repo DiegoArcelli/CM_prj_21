@@ -4,7 +4,9 @@ max_iters = 500;
 load(bunch_file_name)
 k = length(bunch_cel);
 
-timing_fmincon = zeros(1, k);
+timing_quadprog = zeros(1, k);
+f_limit_quadprog = zeros(1, k);
+
 
 % fixed step size
 x_s_kqp_mean_fs = zeros(1, max_iters+1);
@@ -69,7 +71,7 @@ for problem_instance = bunch_cel
     eigs_Q = eig(Q);
     L = max(eigs_Q);
     tau = min(eigs_Q);
-
+    
     f = @(x) objective_function(Q,q,x);
     
     % FIXED ---------
@@ -148,13 +150,11 @@ for problem_instance = bunch_cel
     f_limit_armijo_ii(i) = f_seq_padded(end);
 
     % FMINCON ---------
-    
-    x_s_fmincon = [];
-    f_s_fmincon = [];
-    
+        
     tic;
-    minimize_matlab_kqp(x_start, Q, q, l, u, a, b, max_iters, false);
-    timing_fmincon(i) = toc;
+    [~, f_star_quadprog] = minimize_matlab_kqp(x_start, Q, q, l, u, a, b, max_iters, false);
+    timing_quadprog(i) = toc;
+    f_limit_quadprog(i) = abs(f_star_quadprog - f_star)/abs(f_star);
     
     % ---------
     
@@ -201,6 +201,7 @@ fprintf("relative error on the x reached armijo_ii step size, mean %d, var %d\n"
 fprintf("relative error on the f reached armijo_ii step size, mean %d, var %d\n\n", mean(f_limit_armijo_ii), var(f_limit_armijo_ii));
 
 fprintf("convergence time quadprog step size, mean %d, std %d\n", mean(timing_fmincon), std(timing_fmincon));
+fprintf("relative error on the f reached quadprog step size, mean %d, var %d\n\n", mean(f_limit_quadprog), var(f_limit_quadprog));
 
 % plot the convergence curve
 
@@ -240,6 +241,7 @@ function [seq] = padding_sequence(sequence, max_iter)
     
     seq = [sequence, padding];
 end
+
 
 function [seq] = remove_padding_from_sequence(sequence)
     min_seq = min(sequence);
