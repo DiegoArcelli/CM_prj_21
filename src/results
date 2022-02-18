@@ -24,6 +24,7 @@ relative error on the x reached armijo_ii step size, mean 4.022675e-04, var 5.37
 relative error on the f reached armijo_ii step size, mean 9.708934e-06, var 6.328133e-11
 
 convergence time quadprog step size, mean 5.603843e-03, std 6.735544e-04
+relative error on the f reached quadprog step size, mean 1.346488e-13, var 2.924583e-25
 
 -------------------------
 
@@ -51,6 +52,7 @@ relative error on the x reached armijo_ii step size, mean 4.998024e-04, var 7.88
 relative error on the f reached armijo_ii step size, mean 2.050850e-04, var 1.712115e-07
 
 convergence time quadprog step size, mean 5.845052e-03, std 1.195462e-03
+relative error on the f reached quadprog step size, mean 1.994394e-12, var 1.639099e-22
 
 -------------------------
 
@@ -78,6 +80,7 @@ relative error on the x reached armijo_ii step size, mean 4.949776e-04, var 5.80
 relative error on the f reached armijo_ii step size, mean 7.205241e-03, var 4.404590e-03
 
 convergence time quadprog step size, mean 5.866063e-03, std 8.258391e-04
+relative error on the f reached quadprog step size, mean 1.629458e-11, var 7.998107e-21
 
 --------------------
 
@@ -105,6 +108,7 @@ relative error on the x reached armijo_ii step size, mean 6.572202e-04, var 1.40
 relative error on the f reached armijo_ii step size, mean 3.441938e-05, var 6.026573e-10
 
 convergence time quadprog step size, mean 5.372228e-03, std 6.323543e-04
+relative error on the f reached quadprog step size, mean 8.693857e-14, var 1.382577e-25
 
 -------------------------
 
@@ -132,6 +136,7 @@ relative error on the x reached armijo_ii step size, mean 5.338000e-04, var 6.46
 relative error on the f reached armijo_ii step size, mean 1.519357e-03, var 2.516096e-05
 
 convergence time quadprog step size, mean 5.582170e-03, std 1.408262e-03
+relative error on the f reached quadprog step size, mean 2.970748e-12, var 2.051272e-22
 
 ----------------
 
@@ -159,6 +164,7 @@ relative error on the x reached armijo_ii step size, mean 1.048870e-03, var 2.16
 relative error on the f reached armijo_ii step size, mean 7.962401e-04, var 1.879149e-05
 
 convergence time quadprog step size, mean 5.453086e-03, std 8.066699e-04
+relative error on the f reached quadprog step size, mean 8.497010e-13, var 3.070572e-23
 
 ---------------
 
@@ -185,6 +191,7 @@ relative error on the x reached armijo_ii step size, mean 6.715854e-04, var 3.58
 relative error on the f reached armijo_ii step size, mean 3.454432e-05, var 3.264398e-10
 
 convergence time quadprog step size, mean 2.970667e-02, std 2.762134e-03
+relative error on the f reached quadprog step size, mean 1.566513e-14, var 2.517505e-27
 
 n = 1000
 
