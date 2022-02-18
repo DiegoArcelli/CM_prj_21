@@ -1,4 +1,4 @@
-n = 1000;
+n = 10000;
 scale = 10;
 n_samples = 1;
 inter_per  = 1;
@@ -42,9 +42,7 @@ for problem_instance = 1:n_samples
     [~, f_fixed, ~, ~, ~] = KQP(f, l, u, a, b , x_start, 1e-15, 1e-15, max_iters, "fixed", 1/L, 0, 0);
     timing_kqp_fs(i) = toc;
     relative_error_kqp_fs(i) = abs(f_fixed - f_star)/abs(f_star);
-    
-    disp(relative_error_kqp_fs);
-    
+        
     % POLYAK ---------
     
     tic;

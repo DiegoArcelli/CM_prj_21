@@ -164,9 +164,41 @@ convergence time quadprog step size, mean 5.453086e-03, std 8.066699e-04
 
 n = 300
 
+convergence time fixed step size, mean 3.590035e-02, std 1.163550e-02
+relative error on the x reached fixed step size, mean 6.875515e-08, var 4.084649e-16
+relative error on the f reached fixed step size, mean 4.204993e-15, var 7.185436e-29
+
+convergence time diminishing step size, mean 2.703846e-01, std 5.849050e-02
+relative error on the x reached diminishing step size, mean 2.208491e-02, var 9.626186e-05
+relative error on the f reached diminishing step size, mean 4.782880e-04, var 1.325816e-07
+
+convergence time polyak step size, mean 4.896072e-02, std 1.902314e-02
+relative error on the x reached polyak step size, mean 6.827824e-08, var 6.304752e-16
+relative error on the f reached polyak step size, mean 4.172296e-15, var 7.501491e-29
+
+convergence time armijo_i step size, mean 4.259757e-01, std 1.573629e-01
+relative error on the x reached armijo_i step size, mean 1.460296e-08, var 5.943867e-17
+relative error on the f reached armijo_i step size, mean 3.066231e-15, var 9.026005e-29
+
+convergence time armijo_ii step size, mean 7.238020e-01, std 6.132156e-02
+relative error on the x reached armijo_ii step size, mean 6.715854e-04, var 3.581316e-08
+relative error on the f reached armijo_ii step size, mean 3.454432e-05, var 3.264398e-10
+
+convergence time quadprog step size, mean 2.970667e-02, std 2.762134e-03
 
 n = 1000
 
+quadprog Elapsed time is 0.480256 seconds.
+convergence time fixed step size, mean 1.186103e+00, std 0
+relative error fixed step size, mean 0, std 0
+convergence time polyak step size, mean 1.186414e+00, std 0
+relative error fixed step size, mean 0, std 0
+
 n = 5000
+quadprog Elapsed time is 29.408381 seconds.
+convergence time fixed step size, mean 2.996689e+01, std 0
+relative error fixed step size, mean 1.928199e-16, std 0
+convergence time polyak step size, mean 3.232316e+01, std 0
+relative error fixed step size, mean 1.928199e-16, std 0
 
 n = 10000
