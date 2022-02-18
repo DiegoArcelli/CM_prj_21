@@ -4,18 +4,6 @@ max_iters = 500;
 load(bunch_file_name)
 k = length(bunch_cel);
 
-% fmincon
-clear global x_s_fmincon;
-clear global f_s_fmincon;
-
-global x_s_fmincon;
-global f_s_fmincon;
-
-x_s_fmincon_mean = zeros(1, max_iters+1);
-f_s_fmincon_mean = zeros(1, max_iters+1);
-
-x_limit_fmincon = zeros(1, k);
-f_limit_fmincon = zeros(1, k);
 timing_fmincon = zeros(1, k);
 
 % fixed step size
@@ -168,15 +156,6 @@ for problem_instance = bunch_cel
     minimize_matlab_kqp(x_start, Q, q, l, u, a, b, max_iters, false);
     timing_fmincon(i) = toc;
     
-    x_seq_padded = padding_sequence(vecnorm(x_s_fmincon - x_star)/norm(x_star), max_iters);
-    f_seq_padded = padding_sequence(abs(f_s_fmincon - f_star)/abs(f_star), max_iters);
-    
-    x_s_fmincon_mean =  x_s_fmincon_mean + x_seq_padded;
-    f_s_fmincon_mean =  f_s_fmincon_mean + f_seq_padded;
-    
-    x_limit_fmincon(i) = x_seq_padded(end);
-    f_limit_fmincon(i) = f_seq_padded(end);
-    
     % ---------
     
     wait_bar = waitbar(i/k, wait_bar,'Processing your data');
@@ -198,9 +177,6 @@ f_s_kqp_mean_armijo_i =  f_s_kqp_mean_armijo_i / k;
 
 x_s_kqp_mean_armijo_ii =  x_s_kqp_mean_armijo_ii / k;
 f_s_kqp_mean_armijo_ii =  f_s_kqp_mean_armijo_ii / k;
-
-x_s_fmincon_mean =  x_s_fmincon_mean / k;
-f_s_fmincon_mean =  f_s_fmincon_mean / k;
 
 % display the statistics over execution
 
@@ -224,9 +200,7 @@ fprintf("convergence time armijo_ii step size, mean %d, std %d\n", mean(timing_k
 fprintf("relative error on the x reached armijo_ii step size, mean %d, var %d\n", mean(x_limit_armijo_ii), var(x_limit_armijo_ii));
 fprintf("relative error on the f reached armijo_ii step size, mean %d, var %d\n\n", mean(f_limit_armijo_ii), var(f_limit_armijo_ii));
 
-fprintf("convergence time fmincon step size, mean %d, std %d\n", mean(timing_fmincon), std(timing_fmincon));
-fprintf("relative error on the x reached fmincon step size, mean %d, var %d\n", mean(x_limit_fmincon), var(x_limit_fmincon));
-fprintf("relative error on the f reached fmincon step size, mean %d, var %d\n\n", mean(f_limit_fmincon), var(f_limit_fmincon));
+fprintf("convergence time quadprog step size, mean %d, std %d\n", mean(timing_fmincon), std(timing_fmincon));
 
 % plot the convergence curve
 
@@ -248,8 +222,7 @@ semilogy(remove_padding_from_sequence(f_s_kqp_mean_diminishing), 'LineWidth',1);
 semilogy(remove_padding_from_sequence(f_s_kqp_mean_polyak), 'LineWidth',1);
 semilogy(remove_padding_from_sequence(f_s_kqp_mean_armijo_i), 'LineWidth',1);
 semilogy(remove_padding_from_sequence(f_s_kqp_mean_armijo_ii), 'LineWidth',1);
-semilogy(remove_padding_from_sequence(f_s_fmincon_mean), 'LineWidth',1);
-lgd = legend('fixed','diminishing', 'polyak', 'armijo 1', 'armijo 2', 'fmincon');
+lgd = legend('fixed','diminishing', 'polyak', 'armijo 1', 'armijo 2');
 lgd.FontSize = 15;
 
 title('Relative norm of fs to f*', 'FontSize', 18);
