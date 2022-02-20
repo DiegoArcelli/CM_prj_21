@@ -1,4 +1,4 @@
-n = 5000;
+n = 10000;
 scale = 10;
 n_samples = 1;
 inter_per  = 1;
@@ -20,8 +20,9 @@ wait_bar = waitbar(0,'Processing your data');
 % bunch_cel is the name of the bunch of problems
 for problem_instance = 1:n_samples
     i = i+1;
-        
+
     [Q, q, l, u, a, b, x_start] = generate_problem(n, scale, inter_per, actv_per);
+        
     
     tic;
     [x_star, f_star] = minimize_matlab_kqp(x_start, Q, q, l, u, a, b, -1, true);
@@ -38,14 +39,14 @@ for problem_instance = 1:n_samples
     % FIXED ---------
     
     tic;
-    [~, f_fixed, ~, ~, ~] = KQP(f, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "fixed", 1/L, 0, 0);
+    [~, f_fixed, ~, ~, ~] = KQP(f, l, u, a, b , x_start, 1e-15, 1e-15, max_iters, "fixed", 1/L, 0, 0);
     timing_kqp_fs(i) = toc;
     relative_error_kqp_fs(i) = abs(f_fixed - f_star)/abs(f_star);
-    
+        
     % POLYAK ---------
     
     tic;
-    [~, f_polyak, ~, ~, ~] = KQP(f, l, u, a, b , x_start, 1e-6, 1e-15, max_iters, "polyak", @(i) L^2/i, 0, 0);
+    [~, f_polyak, ~, ~, ~] = KQP(f, l, u, a, b , x_start, 1e-15, 1e-15, max_iters, "polyak", @(i) L^2/i, 0, 0);
     timing_kqp_polyak(i) = toc;
     relative_error_kqp_polyak(i) = abs(f_polyak - f_star)/abs(f_star);
     
