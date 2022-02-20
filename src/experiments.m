@@ -1,4 +1,4 @@
-bunch_file_name = "bunch_300.mat";
+bunch_file_name = "bunch_100_menouno_zerodue.mat";
 max_iters = 500;
 
 load(bunch_file_name)
@@ -200,7 +200,7 @@ fprintf("convergence time armijo_ii step size, mean %d, std %d\n", mean(timing_k
 fprintf("relative error on the x reached armijo_ii step size, mean %d, var %d\n", mean(x_limit_armijo_ii), var(x_limit_armijo_ii));
 fprintf("relative error on the f reached armijo_ii step size, mean %d, var %d\n\n", mean(f_limit_armijo_ii), var(f_limit_armijo_ii));
 
-fprintf("convergence time quadprog step size, mean %d, std %d\n", mean(timing_fmincon), std(timing_fmincon));
+fprintf("convergence time quadprog step size, mean %d, std %d\n", mean(timing_quadprog), std(timing_quadprog));
 fprintf("relative error on the f reached quadprog step size, mean %d, var %d\n\n", mean(f_limit_quadprog), var(f_limit_quadprog));
 
 % plot the convergence curve
